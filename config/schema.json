@@ -1,0 +1,20 @@
+{
+    "$schema": "http://json-schema.org/schema",
+    "title": "Miso Config",
+    "properties": {
+        "discordToken": {
+            "title": "Discord Bot Token",
+            "type": "string"
+        },
+        "priviledgedUsers": {
+            "title": "Priviledged User IDs",
+            "description": "Allows access to developer commands.",
+            "type": "array",
+            "items": {
+                "type": "string"
+            },
+            "uniqueItems": true
+        }
+    },
+    "required": ["discordToken", "priviledgedUsers"]
+}

@@ -1,0 +1,29 @@
+{
+    "compilerOptions": {
+        "target": "ES2021",
+        "module": "commonjs",
+        "noEmit": true,
+        "esModuleInterop": true,
+        "forceConsistentCasingInFileNames": true,
+        "strict": true,
+        "noImplicitAny": true,
+        "strictNullChecks": true,
+        "noImplicitThis": true,
+        "useUnknownInCatchVariables": true,
+        "alwaysStrict": true,
+        "noUnusedParameters": true,
+        "noUnusedLocals": true,
+        "noFallthroughCasesInSwitch": true,
+        "noUncheckedIndexedAccess": true,
+        "skipLibCheck": true,
+        "resolveJsonModule": true,
+        "checkJs": true,
+        "baseUrl": "src",
+        "paths": {
+            "@/core/*": ["core/*"],
+            "@/events/*": ["events/*"],
+            "@/commands/*": ["commands/*"],
+            "@/utils/*": ["utils/*"]
+        }
+    }
+}
