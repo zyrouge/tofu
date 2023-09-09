@@ -5,6 +5,11 @@ import { MisoCommand, MisoCommandAction } from "@/core/command";
 import { MisoEvent } from "@/core/event";
 import { paths } from "@/utils/paths";
 import { log } from "@/utils/log";
+import {
+    PingServer,
+    PingServerOptions,
+    startPingServer,
+} from "@/utils/pingServer";
 import { pingCommand } from "@/commands/developer/ping";
 import { readyEvent } from "@/events/ready";
 import { interactionCreateEvent } from "@/events/interactionCreate";
@@ -13,6 +18,7 @@ import { evalCommand } from "@/commands/developer/eval";
 export interface MisoConfig {
     discordToken: string;
     priviledgedUsers: string[];
+    pingServer?: PingServerOptions;
 }
 
 export interface MisoBinding {
@@ -24,6 +30,7 @@ export class Miso {
     config: MisoConfig;
 
     commandActions = new Map<string, MisoCommandAction>();
+    pingServer?: PingServer;
 
     constructor(config: MisoConfig) {
         this.bot = new CommandClient(config.discordToken, {
@@ -35,6 +42,7 @@ export class Miso {
     async start() {
         await this.loadEvents();
         await this.bot.connect();
+        await this.loadPingServer();
     }
 
     async loadCommands() {
@@ -70,6 +78,12 @@ export class Miso {
         log.info(`Registered ${Miso.commands.length} commands.`);
     }
 
+    async loadPingServer() {
+        if (this.config.pingServer) {
+            this.pingServer = await startPingServer(this.config.pingServer);
+        }
+    }
+
     static commands: MisoCommand[] = [pingCommand, evalCommand];
     static events: MisoEvent<any>[] = [readyEvent, interactionCreateEvent];
 
@@ -93,7 +107,11 @@ export class Miso {
             typeof casted === "object" &&
             typeof casted.discordToken === "string" &&
             Array.isArray(casted.priviledgedUsers) &&
-            casted.priviledgedUsers.every((x) => typeof x === "string")
+            casted.priviledgedUsers.every((x) => typeof x === "string") &&
+            (typeof casted.pingServer === "undefined" ||
+                (typeof casted.pingServer === "object" &&
+                    typeof casted.pingServer.host === "string" &&
+                    typeof casted.pingServer.port === "number"))
         );
     }
 }

@@ -4,7 +4,7 @@ import {
     InteractionContent,
     FileContent,
 } from "eris";
-import { Miso } from "./miso";
+import { Miso } from "@/core/miso";
 
 export interface MisoCommandActionReply {
     message: string | InteractionContent;

@@ -14,6 +14,22 @@
                 "type": "string"
             },
             "uniqueItems": true
+        },
+        "pingServer": {
+            "title": "Ping Server",
+            "description": "Should start a ping server?",
+            "type": "object",
+            "properties": {
+                "host": {
+                    "title": "Server Host",
+                    "type": "string"
+                },
+                "port": {
+                    "title": "Server Port",
+                    "type": "number"
+                }
+            },
+            "required": ["host", "port"]
         }
     },
     "required": ["discordToken", "priviledgedUsers"]
