@@ -16,14 +16,14 @@ export const queueCommand: TofuCommand = {
             },
         ],
     },
-    invoke: async (miso, interaction) => {
+    invoke: async (tofu, interaction) => {
         const guildID = interaction.guildID!;
         const page =
             ErisUtils.getCommandInteractionNumberOptionValue(
                 interaction,
                 "page"
             ) ?? 1;
-        const connection = miso.music.getConnection(guildID);
+        const connection = tofu.music.getConnection(guildID);
         if (!connection) {
             return {
                 message: ErisUtils.robotMessage(`Nothing is being played.`),

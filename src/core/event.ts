@@ -2,7 +2,7 @@ import { ClientEvents } from "eris";
 import { Tofu } from "@/core/tofu";
 
 export type TofuEventAction<Event extends keyof ClientEvents> = (
-    miso: Tofu,
+    tofu: Tofu,
     ...args: ClientEvents[Event]
 ) => Promise<void>;
 

@@ -34,7 +34,7 @@ export const playCommand: TofuCommand = {
             value: TofuMusicUtils.shortenVideoURL(x.url),
         }));
     },
-    invoke: async (miso, interaction) => {
+    invoke: async (tofu, interaction) => {
         const guildID = interaction.guildID!;
         const voiceChannelId = interaction.member?.voiceState?.channelID;
         if (!voiceChannelId) {
@@ -103,7 +103,7 @@ export const playCommand: TofuCommand = {
                 ),
             };
         }
-        const connection = await miso.music.createOrGetConnection(
+        const connection = await tofu.music.createOrGetConnection(
             guildID,
             voiceChannelId
         );

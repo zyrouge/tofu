@@ -17,9 +17,9 @@ export const evalCommand: TofuCommand = {
             },
         ],
     },
-    invoke: async (miso, interaction) => {
+    invoke: async (tofu, interaction) => {
         const userId = interaction.member?.id;
-        if (!userId || !miso.config.priviledgedUsers.includes(userId)) {
+        if (!userId || !tofu.config.priviledgedUsers.includes(userId)) {
             return {
                 message: {
                     content: ErisUtils.failureMessage(
@@ -55,7 +55,7 @@ export const evalCommand: TofuCommand = {
             success = false;
             result = err;
         }
-        const content = clean(miso, result);
+        const content = clean(tofu, result);
         const successString = success
             ? ErisUtils.successMessage("Success!")
             : ErisUtils.failureMessage("Failure!");
@@ -77,13 +77,13 @@ export const evalCommand: TofuCommand = {
     },
 };
 
-function clean(miso: Tofu, data: string) {
+function clean(tofu: Tofu, data: string) {
     const content =
         typeof data === "string" ? data : inspect(data, { depth: 1 });
     return (
         content
             .replaceAll(
-                miso.config.discordToken,
+                tofu.config.discordToken,
                 "mfa.VkO_2G4Qv3T--NO--lWetW_tjND--TOKEN--QFTm6YGtzq9PH--4U--tG0"
             )
             .replace(/`/g, "`" + String.fromCharCode(8203))

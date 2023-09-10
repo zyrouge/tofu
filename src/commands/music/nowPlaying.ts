@@ -8,9 +8,9 @@ export const nowPlayingCommand: TofuCommand = {
         name: "nowplaying",
         description: "View current playing song.",
     },
-    invoke: async (miso, interaction) => {
+    invoke: async (tofu, interaction) => {
         const guildID = interaction.guildID!;
-        const connection = miso.music.getConnection(guildID);
+        const connection = tofu.music.getConnection(guildID);
         const song = connection?.songs[connection?.index];
         if (!connection || !song) {
             return {

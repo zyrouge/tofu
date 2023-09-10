@@ -19,7 +19,7 @@
         "zod": "^3.22.2"
     },
     "repository": {
-        "url": "https://github.com/zyrouge/miso"
+        "url": "https://github.com/zyrouge/tofu"
     },
     "license": "MIT",
     "keywords": [],

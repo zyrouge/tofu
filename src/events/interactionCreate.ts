@@ -7,23 +7,23 @@ export const interactionCreateEvent: TofuEvent<"interactionCreate"> = {
         name: "interactionCreate",
         type: "on",
     },
-    action: async (miso, interaction) => {
+    action: async (tofu, interaction) => {
         if (interaction instanceof CommandInteraction) {
             await interaction.defer();
-            await onCommandInteration(miso, interaction);
+            await onCommandInteration(tofu, interaction);
         } else if (interaction instanceof AutocompleteInteraction) {
-            await onAutoCompleteInteration(miso, interaction);
+            await onAutoCompleteInteration(tofu, interaction);
         }
     },
 };
 
 const onCommandInteration = async (
-    miso: Tofu,
+    tofu: Tofu,
     interaction: CommandInteraction
 ) => {
-    const action = miso.commandInvokes.get(interaction.data.name);
+    const action = tofu.commandInvokes.get(interaction.data.name);
     if (!action) return;
-    const result = await action(miso, interaction);
+    const result = await action(tofu, interaction);
     if (!result) return;
     if (typeof result === "string") {
         await interaction.createMessage(result);
@@ -33,12 +33,12 @@ const onCommandInteration = async (
 };
 
 const onAutoCompleteInteration = async (
-    miso: Tofu,
+    tofu: Tofu,
     interaction: AutocompleteInteraction
 ) => {
-    const action = miso.commandAutoCompletes.get(interaction.data.name);
+    const action = tofu.commandAutoCompletes.get(interaction.data.name);
     if (!action) return;
-    const result = await action(miso, interaction);
+    const result = await action(tofu, interaction);
     if (!result) return;
     await interaction.result(result);
 };

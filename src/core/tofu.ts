@@ -104,8 +104,8 @@ export class Tofu {
         if (!config) {
             throw new Error(`Invalid mode config at "${configPath}"`);
         }
-        const miso = new Tofu(config);
-        return miso;
+        const tofu = new Tofu(config);
+        return tofu;
     }
 
     static parseConfig(config: any): TofuConfig | undefined {

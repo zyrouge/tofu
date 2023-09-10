@@ -7,15 +7,15 @@ export const readyEvent: TofuEvent<"ready"> = {
         name: "ready",
         type: "once",
     },
-    action: async (miso) => {
+    action: async (tofu) => {
         log.success(
             `Logged in as ${log.successColor(
-                `${miso.bot.user.username}#${miso.bot.user.discriminator}`
+                `${tofu.bot.user.username}#${tofu.bot.user.discriminator}`
             )}!`
         );
-        await miso.loadCommands();
-        const status = miso.config.discordStatus;
-        miso.bot.editStatus(
+        await tofu.loadCommands();
+        const status = tofu.config.discordStatus;
+        tofu.bot.editStatus(
             status?.type ?? "online",
             status?.activity?.text
                 ? { name: status.activity.text, type: status.activity.type }

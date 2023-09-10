@@ -20,7 +20,7 @@ export interface TofuSong {
 export class TofuMusic {
     connections = new Map<string, TofuMusicConnection>();
 
-    constructor(public readonly miso: Tofu) {}
+    constructor(public readonly tofu: Tofu) {}
 
     hasConnection(guildId: string) {
         return this.connections.has(guildId);
@@ -30,14 +30,19 @@ export class TofuMusic {
         return this.connections.get(guildId);
     }
 
+    deleteConnection(guildId: string) {
+        return this.connections.delete(guildId);
+    }
+
     async createConnection(guildId: string, voiceChannelId: string) {
-        const voiceConnection = await this.miso.bot.joinVoiceChannel(
+        const voiceConnection = await this.tofu.bot.joinVoiceChannel(
             voiceChannelId,
             {
                 selfDeaf: true,
             }
         );
         const connection = new TofuMusicConnection(
+            this.tofu,
             guildId,
             voiceChannelId,
             voiceConnection
@@ -60,6 +65,7 @@ export class TofuMusicConnection {
     active = false;
 
     constructor(
+        public readonly tofu: Tofu,
         public readonly guildId: string,
         public readonly voiceChannelId: string,
         public readonly voiceConnection: VoiceConnection
@@ -119,17 +125,27 @@ export class TofuMusicConnection {
         );
     }
 
-    pauseOrResume() {
-        if (this.isPlaying) this.pause();
-        else this.resume();
-    }
-
     pause() {
+        if (!this.isPlaying) return false;
         this.voiceConnection.pause();
+        return true;
     }
 
     resume() {
-        this.voiceConnection.resume();
+        const isPlaying = this.isPlaying;
+        if (isPlaying) return false;
+        if (this.index === -1) {
+            this.play();
+        } else {
+            this.voiceConnection.resume();
+        }
+        return true;
+    }
+
+    destroy() {
+        this.tofu.music.deleteConnection(this.guildId);
+        this.voiceConnection.disconnect();
+        this.index = -1;
     }
 
     get isPlaying() {

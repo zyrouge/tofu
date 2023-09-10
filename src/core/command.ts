@@ -14,12 +14,12 @@ export interface TofuCommandReply {
 }
 
 export type TofuCommandAutoComplete = (
-    miso: Tofu,
+    tofu: Tofu,
     interaction: AutocompleteInteraction
 ) => Promise<ApplicationCommandOptionChoice[] | undefined>;
 
 export type TofuCommandInvoke = (
-    miso: Tofu,
+    tofu: Tofu,
     interaction: CommandInteraction
 ) => Promise<TofuCommandReply | undefined>;
 
