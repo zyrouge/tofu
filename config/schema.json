@@ -40,9 +40,26 @@
                     "type": "string",
                     "enum": ["online", "idle", "dnd", "invisible"]
                 },
-                "text": {
-                    "title": "Status Text",
-                    "type": "string"
+                "activity": {
+                    "title": "Status Activity",
+                    "type": "object",
+                    "properties": {
+                        "type": {
+                            "title": "Activity Type",
+                            "type": "string",
+                            "enum": [
+                                "game",
+                                "streaming",
+                                "listening",
+                                "watching",
+                                "competing"
+                            ]
+                        },
+                        "text": {
+                            "title": "Activity Text",
+                            "type": "string"
+                        }
+                    }
                 }
             }
         }

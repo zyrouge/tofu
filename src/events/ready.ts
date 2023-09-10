@@ -1,5 +1,6 @@
 import { TofuEvent } from "@/core/event";
 import { log } from "@/utils/log";
+import { Constants } from "eris";
 
 export const readyEvent: TofuEvent<"ready"> = {
     config: {
@@ -16,7 +17,10 @@ export const readyEvent: TofuEvent<"ready"> = {
         const status = miso.config.discordStatus;
         miso.bot.editStatus(
             status?.type ?? "online",
-            status?.text ? { name: status.text } : undefined
+            status?.activity?.text
+                ? { name: status.activity.text, type: status.activity.type }
+                : undefined
         );
+        Constants.ActivityTypes;
     },
 };

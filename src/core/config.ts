@@ -1,3 +1,4 @@
+import { BotActivityType, Constants } from "eris";
 import { z } from "zod";
 
 export const TofuConfigSchema = z.object({
@@ -11,10 +12,27 @@ export const TofuConfigSchema = z.object({
         .optional(),
     discordStatus: z
         .object({
-            type: z
-                .enum(["online", "idle", "dnd", "invisible"] as const)
+            type: z.enum(["online", "idle", "dnd", "invisible"]).optional(),
+            activity: z
+                .object({
+                    type: z
+                        .enum([
+                            "game",
+                            "streaming",
+                            "listening",
+                            "watching",
+                            "competing",
+                        ])
+                        .optional()
+                        .transform((value) => {
+                            if (typeof value === "undefined") return;
+                            return Constants.ActivityTypes[
+                                value.toUpperCase() as keyof Constants["ActivityTypes"]
+                            ] as BotActivityType;
+                        }),
+                    text: z.string().optional(),
+                })
                 .optional(),
-            text: z.string().optional(),
         })
         .optional(),
 });
