@@ -1,15 +1,15 @@
 import { ClientEvents } from "eris";
-import { Miso } from "@/core/miso";
+import { Tofu } from "@/core/tofu";
 
-export type MisoEventAction<Event extends keyof ClientEvents> = (
-    miso: Miso,
+export type TofuEventAction<Event extends keyof ClientEvents> = (
+    miso: Tofu,
     ...args: ClientEvents[Event]
 ) => Promise<void>;
 
-export interface MisoEvent<Event extends keyof ClientEvents> {
+export interface TofuEvent<Event extends keyof ClientEvents> {
     config: {
         name: Event;
         type: "on" | "once";
     };
-    action: MisoEventAction<Event>;
+    action: TofuEventAction<Event>;
 }

@@ -3,20 +3,28 @@ import {
     CommandInteraction,
     InteractionContent,
     FileContent,
+    AutocompleteInteraction,
+    ApplicationCommandOptionChoice,
 } from "eris";
-import { Miso } from "@/core/miso";
+import { Tofu } from "@/core/tofu";
 
-export interface MisoCommandActionReply {
+export interface TofuCommandReply {
     message: string | InteractionContent;
     file?: FileContent | FileContent[];
 }
 
-export type MisoCommandAction = (
-    miso: Miso,
-    interaction: CommandInteraction
-) => Promise<MisoCommandActionReply | void>;
+export type TofuCommandAutoComplete = (
+    miso: Tofu,
+    interaction: AutocompleteInteraction
+) => Promise<ApplicationCommandOptionChoice[] | undefined>;
 
-export interface MisoCommand {
+export type TofuCommandInvoke = (
+    miso: Tofu,
+    interaction: CommandInteraction
+) => Promise<TofuCommandReply | undefined>;
+
+export interface TofuCommand {
     config: Omit<ChatInputApplicationCommandStructure, "type">;
-    action: MisoCommandAction;
+    autocomplete?: TofuCommandAutoComplete;
+    invoke: TofuCommandInvoke;
 }

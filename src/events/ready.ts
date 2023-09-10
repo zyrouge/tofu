@@ -1,7 +1,7 @@
-import { MisoEvent } from "@/core/event";
+import { TofuEvent } from "@/core/event";
 import { log } from "@/utils/log";
 
-export const readyEvent: MisoEvent<"ready"> = {
+export const readyEvent: TofuEvent<"ready"> = {
     config: {
         name: "ready",
         type: "once",
@@ -13,5 +13,10 @@ export const readyEvent: MisoEvent<"ready"> = {
             )}!`
         );
         await miso.loadCommands();
+        const status = miso.config.discordStatus;
+        miso.bot.editStatus(
+            status?.type ?? "online",
+            status?.text ? { name: status.text } : undefined
+        );
     },
 };

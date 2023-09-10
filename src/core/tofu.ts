@@ -1,42 +1,40 @@
 import p from "path";
 import { CommandClient, Constants } from "eris";
 import { pathExists, readFile } from "fs-extra";
-import { MisoCommand, MisoCommandAction } from "@/core/command";
-import { MisoEvent } from "@/core/event";
+import { TofuConfig, TofuConfigSchema } from "@/core/config";
+import {
+    TofuCommand,
+    TofuCommandInvoke,
+    TofuCommandAutoComplete,
+} from "@/core/command";
+import { TofuEvent } from "@/core/event";
 import { paths } from "@/utils/paths";
 import { log } from "@/utils/log";
-import {
-    PingServer,
-    PingServerOptions,
-    startPingServer,
-} from "@/utils/pingServer";
+import { PingServer, startPingServer } from "@/utils/pingServer";
 import { pingCommand } from "@/commands/developer/ping";
 import { readyEvent } from "@/events/ready";
 import { interactionCreateEvent } from "@/events/interactionCreate";
 import { evalCommand } from "@/commands/developer/eval";
+import { TofuMusic } from "@/core/modules/music";
+import { playCommand } from "@/commands/music/play";
+import { queueCommand } from "@/commands/music/queue";
+import { nowPlayingCommand } from "@/commands/music/nowPlaying";
 
-export interface MisoConfig {
-    discordToken: string;
-    priviledgedUsers: string[];
-    pingServer?: PingServerOptions;
-}
-
-export interface MisoBinding {
-    bind(miso: Miso): Promise<void>;
-}
-
-export class Miso {
+export class Tofu {
     bot: CommandClient;
-    config: MisoConfig;
+    config: TofuConfig;
 
-    commandActions = new Map<string, MisoCommandAction>();
+    commandAutoCompletes = new Map<string, TofuCommandAutoComplete>();
+    commandInvokes = new Map<string, TofuCommandInvoke>();
     pingServer?: PingServer;
+    music: TofuMusic;
 
-    constructor(config: MisoConfig) {
+    constructor(config: TofuConfig) {
         this.bot = new CommandClient(config.discordToken, {
             intents: ["guilds", "guildVoiceStates"],
         });
         this.config = config;
+        this.music = new TofuMusic(this);
     }
 
     async start() {
@@ -46,20 +44,23 @@ export class Miso {
     }
 
     async loadCommands() {
-        for (const x of Miso.commands) {
+        for (const x of Tofu.commands) {
             const commandName = x.config.name;
             await this.bot.createCommand({
                 ...x.config,
                 type: Constants.ApplicationCommandTypes.CHAT_INPUT,
             });
-            this.commandActions.set(commandName, x.action);
+            if (x.autocomplete) {
+                this.commandAutoCompletes.set(commandName, x.autocomplete);
+            }
+            this.commandInvokes.set(commandName, x.invoke);
             log.debug(`Registered ${commandName} command.`);
         }
-        log.info(`Registered ${Miso.commands.length} commands.`);
+        log.info(`Registered ${Tofu.commands.length} commands.`);
     }
 
     async loadEvents() {
-        for (const x of Miso.events) {
+        for (const x of Tofu.events) {
             const eventName = x.config.name;
             const listener = async (...args: any[]) => {
                 await x.action(this, ...args);
@@ -75,7 +76,7 @@ export class Miso {
             }
             log.debug(`Registered ${eventName} event.`);
         }
-        log.info(`Registered ${Miso.commands.length} commands.`);
+        log.info(`Registered ${Tofu.commands.length} commands.`);
     }
 
     async loadPingServer() {
@@ -84,8 +85,14 @@ export class Miso {
         }
     }
 
-    static commands: MisoCommand[] = [pingCommand, evalCommand];
-    static events: MisoEvent<any>[] = [readyEvent, interactionCreateEvent];
+    static commands: TofuCommand[] = [
+        pingCommand,
+        evalCommand,
+        playCommand,
+        queueCommand,
+        nowPlayingCommand,
+    ];
+    static events: TofuEvent<any>[] = [readyEvent, interactionCreateEvent];
 
     static async create(mode: string) {
         const configPath = p.join(paths.configDir, `${mode}.json`);
@@ -93,25 +100,16 @@ export class Miso {
             throw new Error(`Missing mode config at "${configPath}"`);
         }
         const buffer = await readFile(configPath);
-        const config = JSON.parse(buffer.toString());
-        if (!this.checkConfig(config)) {
+        const config = this.parseConfig(JSON.parse(buffer.toString()));
+        if (!config) {
             throw new Error(`Invalid mode config at "${configPath}"`);
         }
-        const miso = new Miso(config);
+        const miso = new Tofu(config);
         return miso;
     }
 
-    static checkConfig(config: any): config is MisoConfig {
-        const casted: MisoConfig = config;
-        return (
-            typeof casted === "object" &&
-            typeof casted.discordToken === "string" &&
-            Array.isArray(casted.priviledgedUsers) &&
-            casted.priviledgedUsers.every((x) => typeof x === "string") &&
-            (typeof casted.pingServer === "undefined" ||
-                (typeof casted.pingServer === "object" &&
-                    typeof casted.pingServer.host === "string" &&
-                    typeof casted.pingServer.port === "number"))
-        );
+    static parseConfig(config: any): TofuConfig | undefined {
+        const parsed = TofuConfigSchema.safeParse(config);
+        if (parsed.success) return parsed.data;
     }
 }

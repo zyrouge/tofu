@@ -1,6 +1,6 @@
 {
     "$schema": "http://json-schema.org/schema",
-    "title": "Miso Config",
+    "title": "Tofu Config",
     "properties": {
         "discordToken": {
             "title": "Discord Bot Token",
@@ -30,6 +30,21 @@
                 }
             },
             "required": ["host", "port"]
+        },
+        "discordStatus": {
+            "title": "Discord Bot Status",
+            "type": "object",
+            "properties": {
+                "type": {
+                    "title": "Status Type",
+                    "type": "string",
+                    "enum": ["online", "idle", "dnd", "invisible"]
+                },
+                "text": {
+                    "title": "Status Text",
+                    "type": "string"
+                }
+            }
         }
     },
     "required": ["discordToken", "priviledgedUsers"]

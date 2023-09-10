@@ -1,12 +1,10 @@
 import http from "http";
 import { ListenOptions } from "net";
 import { URL } from "url";
+import { TofuConfig } from "@/core/config";
 import { log } from "@/utils/log";
 
-export interface PingServerOptions {
-    host: string;
-    port: number;
-}
+export type PingServerOptions = NonNullable<TofuConfig["pingServer"]>;
 
 export interface PingServerStats {
     hits: number;

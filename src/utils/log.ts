@@ -8,7 +8,7 @@ export class Logger {
     debugColor = logColors.dim;
 
     info(text: string) {
-        this.log("~", this.infoColor, text);
+        this.log("i", this.infoColor, text);
     }
 
     success(text: string) {
@@ -20,11 +20,11 @@ export class Logger {
     }
 
     error(text: string) {
-        this.log("✕", this.errorColor, text);
+        this.log("×", this.errorColor, text);
     }
 
     debug(text: string) {
-        this.log("~", this.debugColor, text);
+        this.log("i", this.debugColor, text);
     }
 
     log(level: string, levelStyle: logColors.StyleFunction, text: string) {
