@@ -19,6 +19,9 @@ import { TofuMusic } from "@/core/modules/music";
 import { playCommand } from "@/commands/music/play";
 import { queueCommand } from "@/commands/music/queue";
 import { nowPlayingCommand } from "@/commands/music/nowPlaying";
+import { pauseCommand } from "@/commands/music/pause";
+import { resumeCommand } from "@/commands/music/resume";
+import { stopCommand } from "@/commands/music/stop";
 
 export class Tofu {
     bot: CommandClient;
@@ -91,6 +94,9 @@ export class Tofu {
         playCommand,
         queueCommand,
         nowPlayingCommand,
+        pauseCommand,
+        resumeCommand,
+        stopCommand,
     ];
     static events: TofuEvent<any>[] = [readyEvent, interactionCreateEvent];
 
