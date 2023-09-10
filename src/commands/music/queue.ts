@@ -39,6 +39,7 @@ export const queueCommand: TofuCommand = {
             emojis.music,
             `**Queue** (${page}/${totalPages})`
         )}`;
+        content += "\n";
         if (songs.length > 0) {
             content += songs
                 .map((x, i) => {
