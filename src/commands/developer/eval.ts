@@ -43,7 +43,6 @@ export const evalCommand: TofuCommand = {
                 },
             };
         }
-        await interaction.defer();
         let success: boolean, result: any;
         try {
             let evaled = eval(code);

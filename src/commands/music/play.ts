@@ -56,7 +56,6 @@ export const playCommand: TofuCommand = {
                 ),
             };
         }
-        await interaction.defer();
         let title = "";
         let url = "";
         const songs: TofuSong[] = [];

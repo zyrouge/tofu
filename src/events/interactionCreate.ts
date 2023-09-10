@@ -9,6 +9,7 @@ export const interactionCreateEvent: TofuEvent<"interactionCreate"> = {
     },
     action: async (miso, interaction) => {
         if (interaction instanceof CommandInteraction) {
+            await interaction.defer();
             await onCommandInteration(miso, interaction);
         } else if (interaction instanceof AutocompleteInteraction) {
             await onAutoCompleteInteration(miso, interaction);
