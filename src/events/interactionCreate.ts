@@ -8,6 +8,7 @@ export const interactionCreateEvent: TofuEvent<"interactionCreate"> = {
         type: "on",
     },
     action: async (tofu, interaction) => {
+        if (!tofu.botReady) return;
         if (interaction instanceof CommandInteraction) {
             await interaction.defer();
             await onCommandInteration(tofu, interaction);

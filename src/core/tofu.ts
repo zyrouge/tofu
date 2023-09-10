@@ -27,6 +27,7 @@ export class Tofu {
     bot: CommandClient;
     config: TofuConfig;
 
+    botReady = false;
     commandAutoCompletes = new Map<string, TofuCommandAutoComplete>();
     commandInvokes = new Map<string, TofuCommandInvoke>();
     pingServer?: PingServer;

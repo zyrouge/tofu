@@ -1,6 +1,5 @@
 import { TofuEvent } from "@/core/event";
 import { log } from "@/utils/log";
-import { Constants } from "eris";
 
 export const readyEvent: TofuEvent<"ready"> = {
     config: {
@@ -21,6 +20,6 @@ export const readyEvent: TofuEvent<"ready"> = {
                 ? { name: status.activity.text, type: status.activity.type }
                 : undefined
         );
-        Constants.ActivityTypes;
+        tofu.botReady = true;
     },
 };
