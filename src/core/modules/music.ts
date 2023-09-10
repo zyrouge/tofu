@@ -126,14 +126,14 @@ export class TofuMusicConnection {
     }
 
     pause() {
-        if (!this.isPlaying) return false;
+        if (this.isPaused) return false;
         this.voiceConnection.pause();
         return true;
     }
 
     resume() {
-        const isPlaying = this.isPlaying;
-        if (isPlaying) return false;
+        const isPaused = this.isPaused;
+        if (!isPaused) return false;
         if (this.index === -1) {
             this.play();
         } else {
@@ -149,7 +149,11 @@ export class TofuMusicConnection {
     }
 
     get isPlaying() {
-        return this.voiceConnection.playing;
+        return this.voiceConnection.playing && !this.voiceConnection.paused;
+    }
+
+    get isPaused() {
+        return this.voiceConnection.paused;
     }
 
     get duration() {
