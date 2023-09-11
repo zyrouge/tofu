@@ -29,6 +29,7 @@ import { voiceChannelJoinEvent } from "@/events/voiceChannelJoin";
 import { voiceChannelLeaveEvent } from "@/events/voiceChannelLeave";
 import { voiceChannelSwitchEvent } from "@/events/voiceChannelSwitch";
 import { dequeueCommand } from "@/commands/music/dequeue";
+import { geniusCommand } from "@/commands/utils/genius";
 
 export class Tofu {
     bot: CommandClient;
@@ -111,6 +112,7 @@ export class Tofu {
         skipCommand,
         jumpCommand,
         dequeueCommand,
+        geniusCommand,
     ];
     static events: TofuEvent<any>[] = [
         readyEvent,

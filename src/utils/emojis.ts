@@ -11,4 +11,5 @@ export const emojis = {
     speakerLow: "🔉",
     speakerHigh: "🔊",
     nextTrack: "⏭️",
+    memo: "📝",
 };

@@ -270,7 +270,7 @@ export class TofuMusicUtils {
             return videos;
         } catch (err) {
             log.error(
-                `Unable to generate search results for "${terms}" (${log.errorColor(
+                `Unable to generate YouTube search results for "${terms}" (${log.errorColor(
                     `${err}`
                 )})`
             );
@@ -284,7 +284,7 @@ export class TofuMusicUtils {
             return video;
         } catch (err) {
             log.error(
-                `Unable to fetch video information for "${url}" (${log.errorColor(
+                `Unable to fetch YouTube video information for "${url}" (${log.errorColor(
                     `${err}`
                 )})`
             );
@@ -297,7 +297,7 @@ export class TofuMusicUtils {
             return playlist;
         } catch (err) {
             log.error(
-                `Unable to fetch playlist information for "${url}" (${log.errorColor(
+                `Unable to fetch YouTube playlist information for "${url}" (${log.errorColor(
                     `${err}`
                 )})`
             );
