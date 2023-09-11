@@ -2,10 +2,10 @@ import { TofuCommand } from "@/core/command";
 import { emojis } from "@/utils/emojis";
 import { ErisUtils } from "@/utils/eris";
 
-export const pauseCommand: TofuCommand = {
+export const skipCommand: TofuCommand = {
     config: {
-        name: "pause",
-        description: "Pauses music playback.",
+        name: "skip",
+        description: "Skip current song.",
     },
     invoke: async (tofu, interaction) => {
         const guildID = interaction.guildID!;
@@ -23,19 +23,9 @@ export const pauseCommand: TofuCommand = {
                 ),
             };
         }
-        const paused = await connection.pause();
-        if (!paused) {
-            return {
-                message: ErisUtils.robotMessage(
-                    "Music playback is already paused."
-                ),
-            };
-        }
+        await connection.jump(connection.nextSongIndex());
         return {
-            message: ErisUtils.prettyMessage(
-                emojis.pause,
-                "Music playback paused."
-            ),
+            message: ErisUtils.prettyMessage(emojis.nextTrack, "Skipped."),
         };
     },
 };

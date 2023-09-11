@@ -14,7 +14,7 @@ export const nowPlayingCommand: TofuCommand = {
         const song = connection?.songs[connection?.index];
         if (!connection || !song) {
             return {
-                message: ErisUtils.robotMessage(`Nothing is being played.`),
+                message: ErisUtils.robotMessage("Nothing is being played."),
             };
         }
         return {

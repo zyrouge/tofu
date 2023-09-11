@@ -26,7 +26,7 @@ export const queueCommand: TofuCommand = {
         const connection = tofu.music.getConnection(guildID);
         if (!connection) {
             return {
-                message: ErisUtils.robotMessage(`Nothing is being played.`),
+                message: ErisUtils.robotMessage("Nothing is being played."),
             };
         }
         const perPage = 10;
@@ -39,17 +39,20 @@ export const queueCommand: TofuCommand = {
             emojis.music,
             `**Queue** (${page}/${totalPages})`
         )}`;
-        content += "\n\n";
+        content += "\n";
         if (songs.length > 0) {
+            const statusEmoji = connection.paused ? emojis.pause : emojis.play;
             content += songs
                 .map((x, i) => {
                     const offsetIndex = offsetStart + i;
-                    const isNowPlaying = offsetIndex === connection.index;
-                    return `${offsetIndex + 1}. ${
-                        isNowPlaying ? `${emojis.music} ` : ""
-                    }[${StringUtils.overflow(x.metadata.title)}](<${
+                    const isCurrentPlaying = offsetIndex === connection.index;
+                    const prefix = isCurrentPlaying ? `${statusEmoji} **` : "";
+                    const suffix = isCurrentPlaying ? `**` : "";
+                    return `${
+                        offsetIndex + 1
+                    }. ${prefix}[${StringUtils.overflow(x.metadata.title)}](<${
                         x.metadata.url
-                    }>) (Added by <@${x.addedBy}>)`;
+                    }>)${suffix} (Added by <@${x.addedBy}>)`;
                 })
                 .join("\n");
         } else {

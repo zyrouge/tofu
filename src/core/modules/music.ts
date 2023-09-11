@@ -1,4 +1,4 @@
-import { VoiceConnection } from "eris";
+import { VoiceChannel, VoiceConnection } from "eris";
 import * as ytext from "youtube-ext";
 import { Tofu } from "@/core/tofu";
 import { log } from "@/utils/log";
@@ -62,12 +62,13 @@ export class TofuMusicConnection {
     index = -1;
     songs: TofuSong[] = [];
     loop: 0 | 1 | 2 = TofuMusicUtils.LOOP_NONE;
-    active = false;
+
+    scheduledLeaveTimeout: NodeJS.Timeout | undefined;
 
     constructor(
         public readonly tofu: Tofu,
         public readonly guildId: string,
-        public readonly voiceChannelId: string,
+        public voiceChannelId: string,
         public readonly voiceConnection: VoiceConnection
     ) {
         this.voiceConnection.on("end", () => {
@@ -90,16 +91,40 @@ export class TofuMusicConnection {
 
     async play() {
         const song = this.songs[this.index];
-        if (!song) return;
+        if (!song) return false;
         const stream = await TofuMusicUtils.generateSongStream(song);
         if (!stream) {
             this.onVoiceConnectionEnd();
             return;
         }
-        this.voiceConnection.play(stream);
+        this.voiceConnection.play(stream, {
+            inlineVolume: true,
+        });
+        return true;
+    }
+
+    nextSongIndex() {
+        let nIndex =
+            this.loop === TofuMusicUtils.LOOP_TRACK
+                ? this.index
+                : this.index + 1;
+        if (
+            this.loop === TofuMusicUtils.LOOP_QUEUE &&
+            nIndex >= this.songs.length
+        ) {
+            nIndex = 0;
+        }
+        if (!this.hasSongAt(nIndex)) {
+            nIndex = -1;
+        }
+        return nIndex;
     }
 
     async onVoiceConnectionEnd() {
+        if (!this.voiceConnection.ready || this.isVoiceChannelEmpty()) {
+            this.destroy();
+            return;
+        }
         let nIndex =
             this.loop === TofuMusicUtils.LOOP_TRACK
                 ? this.index
@@ -111,7 +136,8 @@ export class TofuMusicConnection {
         ) {
             nIndex = 0;
         }
-        this.index = nIndex;
+        this.index = this.nextSongIndex();
+        if (this.index === -1) return;
         await this.play();
     }
 
@@ -125,21 +151,56 @@ export class TofuMusicConnection {
         );
     }
 
-    pause() {
-        if (this.isPaused) return false;
+    async pause() {
+        if (!this.playing || this.paused) return false;
         this.voiceConnection.pause();
         return true;
     }
 
-    resume() {
-        const isPaused = this.isPaused;
-        if (!isPaused) return false;
-        if (this.index === -1) {
-            this.play();
-        } else {
-            this.voiceConnection.resume();
+    async resume() {
+        if (!this.playing && this.index === -1) {
+            if (this.songs.length === 0) {
+                return false;
+            }
+            this.index = 0;
+            return this.play();
         }
+        if (!this.paused) return false;
+        this.voiceConnection.resume();
         return true;
+    }
+
+    hasSongAt(index: number) {
+        return index > -1 && index < this.songs.length;
+    }
+
+    async jump(index: number) {
+        this.stopCurrentSong();
+        if (!this.hasSongAt(index)) return false;
+        this.index = index;
+        return this.play();
+    }
+
+    async remove(index: number) {
+        if (index < 0 || index >= this.songs.length) {
+            return;
+        }
+        const [song] = this.songs.splice(index, 1);
+        if (this.index === index) {
+            this.stopCurrentSong();
+            await this.play();
+        } else if (index < this.index) {
+            this.index--;
+        }
+        return song;
+    }
+
+    setVolume(volume: number) {
+        this.voiceConnection.setVolume(volume / 100);
+    }
+
+    stopCurrentSong() {
+        this.voiceConnection.stopPlaying();
     }
 
     destroy() {
@@ -148,11 +209,44 @@ export class TofuMusicConnection {
         this.index = -1;
     }
 
-    get isPlaying() {
-        return this.voiceConnection.playing && !this.voiceConnection.paused;
+    isVoiceChannelEmpty() {
+        const voiceChannel = this.tofu.bot.getChannel(this.voiceChannelId);
+        if (!(voiceChannel instanceof VoiceChannel)) {
+            return true;
+        }
+        let membersCount = voiceChannel.voiceMembers.size;
+        if (voiceChannel.voiceMembers.has(this.tofu.bot.user.id)) {
+            membersCount--;
+        }
+        return membersCount === 0;
     }
 
-    get isPaused() {
+    scheduleLeave() {
+        if (this.scheduledLeaveTimeout) return;
+        this.scheduledLeaveTimeout = setTimeout(() => {
+            this.removeScheduledLeaveTimeout();
+            if (this.isVoiceChannelEmpty()) {
+                this.destroy();
+            }
+        }, TofuMusicUtils.SCHEDULED_TIMEOUT_MS);
+    }
+
+    removeScheduledLeaveTimeout() {
+        const timeout = this.scheduledLeaveTimeout;
+        if (!timeout) return;
+        delete this.scheduledLeaveTimeout;
+        clearTimeout(timeout);
+    }
+
+    get volume() {
+        return Math.floor(this.voiceConnection.volume * 100);
+    }
+
+    get playing() {
+        return this.voiceConnection.playing;
+    }
+
+    get paused() {
         return this.voiceConnection.paused;
     }
 
@@ -165,6 +259,8 @@ export class TofuMusicUtils {
     static LOOP_NONE = 0 as const;
     static LOOP_QUEUE = 1 as const;
     static LOOP_TRACK = 2 as const;
+
+    static SCHEDULED_TIMEOUT_MS = 300000 as const;
 
     static async search(terms: string) {
         try {

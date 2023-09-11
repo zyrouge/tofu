@@ -1,5 +1,5 @@
 import p from "path";
-import { CommandClient, Constants } from "eris";
+import { ApplicationCommandStructure, CommandClient, Constants } from "eris";
 import { pathExists, readFile } from "fs-extra";
 import { TofuConfig, TofuConfigSchema } from "@/core/config";
 import {
@@ -22,6 +22,13 @@ import { nowPlayingCommand } from "@/commands/music/nowPlaying";
 import { pauseCommand } from "@/commands/music/pause";
 import { resumeCommand } from "@/commands/music/resume";
 import { stopCommand } from "@/commands/music/stop";
+import { skipCommand } from "@/commands/music/skip";
+import { volumeCommand } from "@/commands/music/volume";
+import { jumpCommand } from "@/commands/music/jump";
+import { voiceChannelJoinEvent } from "@/events/voiceChannelJoin";
+import { voiceChannelLeaveEvent } from "@/events/voiceChannelLeave";
+import { voiceChannelSwitchEvent } from "@/events/voiceChannelSwitch";
+import { dequeueCommand } from "@/commands/music/dequeue";
 
 export class Tofu {
     bot: CommandClient;
@@ -48,9 +55,10 @@ export class Tofu {
     }
 
     async loadCommands() {
+        const slashCommands: ApplicationCommandStructure[] = [];
         for (const x of Tofu.commands) {
             const commandName = x.config.name;
-            await this.bot.createCommand({
+            slashCommands.push({
                 ...x.config,
                 type: Constants.ApplicationCommandTypes.CHAT_INPUT,
             });
@@ -60,6 +68,7 @@ export class Tofu {
             this.commandInvokes.set(commandName, x.invoke);
             log.debug(`Registered ${commandName} command.`);
         }
+        await this.bot.bulkEditCommands(slashCommands);
         log.info(`Registered ${Tofu.commands.length} commands.`);
     }
 
@@ -98,8 +107,18 @@ export class Tofu {
         pauseCommand,
         resumeCommand,
         stopCommand,
+        volumeCommand,
+        skipCommand,
+        jumpCommand,
+        dequeueCommand,
     ];
-    static events: TofuEvent<any>[] = [readyEvent, interactionCreateEvent];
+    static events: TofuEvent<any>[] = [
+        readyEvent,
+        interactionCreateEvent,
+        voiceChannelJoinEvent,
+        voiceChannelLeaveEvent,
+        voiceChannelSwitchEvent,
+    ];
 
     static async create(mode: string) {
         const configPath = p.join(paths.configDir, `${mode}.json`);
