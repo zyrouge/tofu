@@ -30,6 +30,7 @@ import { voiceChannelLeaveEvent } from "@/events/voiceChannelLeave";
 import { voiceChannelSwitchEvent } from "@/events/voiceChannelSwitch";
 import { dequeueCommand } from "@/commands/music/dequeue";
 import { geniusCommand } from "@/commands/utils/genius";
+import { isProduction } from "@/utils/env";
 
 export class Tofu {
     bot: CommandClient;
@@ -77,7 +78,16 @@ export class Tofu {
         for (const x of Tofu.events) {
             const eventName = x.config.name;
             const listener = async (...args: any[]) => {
-                await x.action(this, ...args);
+                try {
+                    await x.action(this, ...args);
+                } catch (err) {
+                    if (!isProduction()) {
+                        throw err;
+                    }
+                    log.error(
+                        `Bot event failed. (${log.errorColor(`${err}`)})`
+                    );
+                }
             };
             switch (x.config.type) {
                 case "once":

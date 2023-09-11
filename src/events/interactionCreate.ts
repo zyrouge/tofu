@@ -1,6 +1,8 @@
 import { AutocompleteInteraction, CommandInteraction } from "eris";
 import { TofuEvent } from "@/core/event";
 import { Tofu } from "@/core/tofu";
+import { isProduction } from "@/utils/env";
+import { log } from "@/utils/log";
 
 export const interactionCreateEvent: TofuEvent<"interactionCreate"> = {
     config: {
@@ -22,24 +24,42 @@ const onCommandInteration = async (
     tofu: Tofu,
     interaction: CommandInteraction
 ) => {
-    const action = tofu.commandInvokes.get(interaction.data.name);
-    if (!action) return;
-    const result = await action(tofu, interaction);
-    if (!result) return;
-    if (typeof result === "string") {
-        await interaction.createMessage(result);
-        return;
+    try {
+        const action = tofu.commandInvokes.get(interaction.data.name);
+        if (!action) return;
+        const result = await action(tofu, interaction);
+        if (!result) return;
+        if (typeof result === "string") {
+            await interaction.createMessage(result);
+            return;
+        }
+        await interaction.createMessage(result.message, result.file);
+    } catch (err) {
+        if (!isProduction()) {
+            throw err;
+        }
+        log.error(`Command interaction failed. (${log.errorColor(`${err}`)})`);
     }
-    await interaction.createMessage(result.message, result.file);
 };
 
 const onAutoCompleteInteration = async (
     tofu: Tofu,
     interaction: AutocompleteInteraction
 ) => {
-    const action = tofu.commandAutoCompletes.get(interaction.data.name);
-    if (!action) return;
-    const result = await action(tofu, interaction);
-    if (!result) return;
-    await interaction.result(result);
+    try {
+        const action = tofu.commandAutoCompletes.get(interaction.data.name);
+        if (!action) return;
+        const result = await action(tofu, interaction);
+        if (!result) return;
+        await interaction.result(result);
+    } catch (err) {
+        if (!isProduction()) {
+            throw err;
+        }
+        log.error(
+            `Auto-complete command interaction failed. (${log.errorColor(
+                `${err}`
+            )})`
+        );
+    }
 };

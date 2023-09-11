@@ -6,6 +6,7 @@ export class Logger {
     warnColor = logColors.yellowBright;
     errorColor = logColors.redBright;
     debugColor = logColors.dim;
+    timeColor = logColors.dim;
 
     info(text: string) {
         this.log("i", this.infoColor, text);
@@ -28,7 +29,13 @@ export class Logger {
     }
 
     log(level: string, levelStyle: logColors.StyleFunction, text: string) {
-        console.log(`${levelStyle(`[${level}]`)} ${text}`);
+        console.log(
+            `${this.timeColor(this.time())} ${levelStyle(`[${level}]`)} ${text}`
+        );
+    }
+
+    time() {
+        return new Date().toISOString();
     }
 }
 
