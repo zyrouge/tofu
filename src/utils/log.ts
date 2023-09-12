@@ -30,12 +30,18 @@ export class Logger {
 
     log(level: string, levelStyle: logColors.StyleFunction, text: string) {
         console.log(
-            `${this.timeColor(this.time())} ${levelStyle(`[${level}]`)} ${text}`
+            `${levelStyle(`[${level}]`)} ${this.timeColor(this.time())} ${text}`
         );
     }
 
     time() {
-        return new Date().toISOString();
+        return new Date()
+            .toLocaleString("en-US", {
+                hourCycle: "h24",
+                timeStyle: "short",
+                dateStyle: "short",
+            })
+            .replace(",", "");
     }
 }
 

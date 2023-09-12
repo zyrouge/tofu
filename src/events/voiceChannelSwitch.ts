@@ -6,6 +6,7 @@ export const voiceChannelSwitchEvent: TofuEvent<"voiceChannelSwitch"> = {
         type: "on",
     },
     action: async (tofu, member, newChannel, oldChannel) => {
+        if (tofu.filteredGuilds.isBlacklisted(member.guild.id)) return;
         if (member.id === tofu.bot.user.id) {
             const connection = tofu.music.getConnection(newChannel.guild.id);
             if (connection) {

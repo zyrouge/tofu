@@ -35,6 +35,12 @@ export const TofuConfigSchema = z.object({
                 .optional(),
         })
         .optional(),
+    filteredGuilds: z
+        .object({
+            mode: z.enum(["whitelisted", "blacklisted"]),
+            ids: z.string().array(),
+        })
+        .optional(),
 });
 
 export type TofuConfig = z.infer<typeof TofuConfigSchema>;

@@ -5,7 +5,8 @@ export const voiceChannelLeaveEvent: TofuEvent<"voiceChannelLeave"> = {
         name: "voiceChannelLeave",
         type: "on",
     },
-    action: async (tofu, _, oldChannel) => {
+    action: async (tofu, member, oldChannel) => {
+        if (tofu.filteredGuilds.isBlacklisted(member.guild.id)) return;
         const connection = tofu.music.getConnection(oldChannel.guild.id);
         if (
             connection &&

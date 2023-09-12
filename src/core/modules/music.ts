@@ -92,6 +92,7 @@ export class TofuMusicConnection {
     async play() {
         const song = this.songs[this.index];
         if (!song) return false;
+        console.log(song.metadata.duration);
         const stream = await TofuMusicUtils.generateSongStream(song);
         if (!stream) {
             this.onVoiceConnectionEnd();

@@ -31,6 +31,7 @@ import { voiceChannelSwitchEvent } from "@/events/voiceChannelSwitch";
 import { dequeueCommand } from "@/commands/music/dequeue";
 import { geniusCommand } from "@/commands/utils/genius";
 import { isProduction } from "@/utils/env";
+import { TofuFilteredGuilds } from "@/core/modules/filteredGuilds";
 
 export class Tofu {
     bot: CommandClient;
@@ -41,6 +42,7 @@ export class Tofu {
     commandInvokes = new Map<string, TofuCommandInvoke>();
     pingServer?: PingServer;
     music: TofuMusic;
+    filteredGuilds: TofuFilteredGuilds;
 
     constructor(config: TofuConfig) {
         this.bot = new CommandClient(config.discordToken, {
@@ -48,6 +50,7 @@ export class Tofu {
         });
         this.config = config;
         this.music = new TofuMusic(this);
+        this.filteredGuilds = new TofuFilteredGuilds(this);
     }
 
     async start() {

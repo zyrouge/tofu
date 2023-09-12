@@ -3,6 +3,7 @@ import { TofuEvent } from "@/core/event";
 import { Tofu } from "@/core/tofu";
 import { isProduction } from "@/utils/env";
 import { log } from "@/utils/log";
+import { ErisUtils } from "@/utils/eris";
 
 export const interactionCreateEvent: TofuEvent<"interactionCreate"> = {
     config: {
@@ -24,6 +25,12 @@ const onCommandInteration = async (
     tofu: Tofu,
     interaction: CommandInteraction
 ) => {
+    if (!ErisUtils.isInteractionAllowed(tofu, interaction)) {
+        await interaction.createMessage({
+            content: ErisUtils.failureMessage("Your guild is blacklisted."),
+        });
+        return;
+    }
     try {
         const action = tofu.commandInvokes.get(interaction.data.name);
         if (!action) return;
@@ -46,6 +53,7 @@ const onAutoCompleteInteration = async (
     tofu: Tofu,
     interaction: AutocompleteInteraction
 ) => {
+    if (!ErisUtils.isInteractionAllowed(tofu, interaction)) return;
     try {
         const action = tofu.commandAutoCompletes.get(interaction.data.name);
         if (!action) return;

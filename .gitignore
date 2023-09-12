@@ -2,6 +2,7 @@ node_modules
 config/*
 !config/example.json
 !config/schema.json
+data
 
 # current hosted on repl.it
 .replit

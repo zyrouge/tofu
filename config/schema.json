@@ -62,6 +62,26 @@
                     }
                 }
             }
+        },
+        "filteredGuilds": {
+            "title": "Guilds filter",
+            "type": "object",
+            "properties": {
+                "mode": {
+                    "title": "Filter mode",
+                    "type": "string",
+                    "enum": ["whitelisted", "blacklisted"]
+                },
+                "ids": {
+                    "title": "Guild IDs",
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    },
+                    "uniqueItems": true
+                }
+            },
+            "required": ["mode", "ids"]
         }
     },
     "required": ["discordToken", "priviledgedUsers"]
