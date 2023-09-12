@@ -8,4 +8,4 @@ Discord bot made for \[soon to be filled\].
 
 ## License
 
-[AGPL-3.0](./LICENSE)
+[MIT](./LICENSE)
