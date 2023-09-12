@@ -382,8 +382,9 @@ export class TofuMusicUtils {
                 }
                 return pv;
             }, video.thumbnails[0])?.url,
-            duration: PrettyDuration.formatSeconds(
-                parseInt(video.duration.lengthSec)
+            duration: PrettyDuration.prettySeconds(
+                parseInt(video.duration.lengthSec),
+                "short"
             ),
         };
         return metadata;

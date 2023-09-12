@@ -1,21 +1,49 @@
+export interface PrettyDurationData {
+    hours: number;
+    minutes: number;
+    seconds: number;
+}
+
+export type PrettyDurationFormatter = (duration: PrettyDurationData) => string;
+
+export type PrettyDurationFormats = "short" | "human";
+
 export class PrettyDuration {
-    static formatMilliseconds(total: number) {
-        return this.formatSeconds(total / 1000);
+    static formats: Record<PrettyDurationFormats, PrettyDurationFormatter> = {
+        short: (d) => this.formatShort(d),
+        human: (d) => this.formatHuman(d),
+    };
+
+    static prettyMilliseconds(total: number, format: PrettyDurationFormats) {
+        return this.prettySeconds(total / 1000, format);
     }
 
-    static formatSeconds(total: number) {
-        return this.formatDuration(
-            Math.floor(total / 3600),
-            Math.floor(total / 60) % 60,
-            total % 60
-        );
+    static prettySeconds(total: number, format: PrettyDurationFormats) {
+        const formatter = this.formats[format];
+        return formatter({
+            hours: Math.floor(total / 3600),
+            minutes: Math.floor(total / 60) % 60,
+            seconds: total % 60,
+        });
     }
 
-    static formatDuration(hours: number, minutes: number, seconds: number) {
+    static formatShort({ hours, minutes, seconds }: PrettyDurationData) {
         if (hours === 0) {
             return `${this.p(minutes)}:${this.p(seconds)}`;
         }
         return `${this.p(hours)}:${this.p(minutes)}:${this.p(seconds)}`;
+    }
+
+    static formatHuman({ hours, minutes, seconds }: PrettyDurationData) {
+        let output = "";
+        if (hours > 0) {
+            output += `${hours} hours, `;
+        }
+        if (hours > 0) {
+            output += `${minutes} minutes and `;
+        }
+        output += `${seconds} seconds`;
+        return output;
     }
 
     static p(duration: number) {

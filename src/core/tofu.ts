@@ -32,11 +32,14 @@ import { dequeueCommand } from "@/commands/music/dequeue";
 import { geniusCommand } from "@/commands/utils/genius";
 import { isProduction } from "@/utils/env";
 import { TofuFilteredGuilds } from "@/core/modules/filteredGuilds";
+import { aboutCommand } from "@/commands/utils/about";
+import { uptimeCommand } from "@/commands/developer/uptime";
 
 export class Tofu {
     bot: CommandClient;
     config: TofuConfig;
 
+    startedAt = Date.now();
     botReady = false;
     commandAutoCompletes = new Map<string, TofuCommandAutoComplete>();
     commandInvokes = new Map<string, TofuCommandInvoke>();
@@ -112,6 +115,10 @@ export class Tofu {
         }
     }
 
+    get uptime() {
+        return Date.now() - this.startedAt;
+    }
+
     static commands: TofuCommand[] = [
         pingCommand,
         evalCommand,
@@ -126,7 +133,10 @@ export class Tofu {
         jumpCommand,
         dequeueCommand,
         geniusCommand,
+        aboutCommand,
+        uptimeCommand,
     ];
+
     static events: TofuEvent<any>[] = [
         readyEvent,
         interactionCreateEvent,
