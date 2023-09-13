@@ -4,7 +4,7 @@
 
 # Tofu
 
-Discord bot made for \[soon to be filled\].
+Discord bot made for to be a sidekick for me.
 
 ## License
 
