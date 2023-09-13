@@ -116,7 +116,7 @@ export const playCommand: TofuCommand = {
         }
         connection.addToQueue(songs);
         if (!connection.playing) {
-            connection.index = 0;
+            connection.index = connection.songs.length - 1;
             await connection.play();
             return {
                 message: ErisUtils.prettyMessage(
