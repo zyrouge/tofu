@@ -69,6 +69,7 @@ export class TofuMusicConnection {
     songs: TofuSong[] = [];
     loop: TofuLoop = TofuLoop.none;
 
+    preventEndPlay: true | undefined;
     scheduledLeaveTimeout: NodeJS.Timeout | undefined;
 
     constructor(
@@ -126,6 +127,10 @@ export class TofuMusicConnection {
             return;
         }
         this.index = this.nextSongIndex();
+        if (this.preventEndPlay) {
+            delete this.preventEndPlay;
+            return;
+        }
         if (this.index === -1) return;
         await this.play();
     }
@@ -193,6 +198,7 @@ export class TofuMusicConnection {
     }
 
     stopCurrentSong() {
+        this.preventEndPlay = true;
         this.voiceConnection.stopPlaying();
     }
 
