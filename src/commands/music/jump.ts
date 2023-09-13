@@ -55,7 +55,7 @@ export const jumpCommand: TofuCommand = {
         return {
             message: ErisUtils.prettyMessage(
                 emojis.nextTrack,
-                `Jumped to song at position **${index}**.`
+                `Jumped to song at position **${position}**.`
             ),
         };
     },
