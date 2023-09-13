@@ -58,10 +58,16 @@ export class TofuMusic {
     }
 }
 
+export enum TofuLoop {
+    none = "none",
+    queue = "queue",
+    track = "track",
+}
+
 export class TofuMusicConnection {
     index = -1;
     songs: TofuSong[] = [];
-    loop: 0 | 1 | 2 = TofuMusicUtils.LOOP_NONE;
+    loop: TofuLoop = TofuLoop.none;
 
     scheduledLeaveTimeout: NodeJS.Timeout | undefined;
 
@@ -104,14 +110,8 @@ export class TofuMusicConnection {
     }
 
     nextSongIndex() {
-        let nIndex =
-            this.loop === TofuMusicUtils.LOOP_TRACK
-                ? this.index
-                : this.index + 1;
-        if (
-            this.loop === TofuMusicUtils.LOOP_QUEUE &&
-            nIndex >= this.songs.length
-        ) {
+        let nIndex = this.loop === TofuLoop.track ? this.index : this.index + 1;
+        if (this.loop === TofuLoop.queue && nIndex >= this.songs.length) {
             nIndex = 0;
         }
         if (!this.hasSongAt(nIndex)) {
@@ -124,17 +124,6 @@ export class TofuMusicConnection {
         if (!this.voiceConnection.ready || this.isVoiceChannelEmpty()) {
             this.destroy();
             return;
-        }
-        let nIndex =
-            this.loop === TofuMusicUtils.LOOP_TRACK
-                ? this.index
-                : this.index + 1;
-        if (
-            !this.songs[nIndex] &&
-            this.loop === TofuMusicUtils.LOOP_QUEUE &&
-            this.songs.length > 0
-        ) {
-            nIndex = 0;
         }
         this.index = this.nextSongIndex();
         if (this.index === -1) return;
@@ -199,6 +188,10 @@ export class TofuMusicConnection {
         this.voiceConnection.setVolume(volume / 100);
     }
 
+    setLoop(mode: TofuLoop) {
+        this.loop = mode;
+    }
+
     stopCurrentSong() {
         this.voiceConnection.stopPlaying();
     }
@@ -256,10 +249,6 @@ export class TofuMusicConnection {
 }
 
 export class TofuMusicUtils {
-    static LOOP_NONE = 0 as const;
-    static LOOP_QUEUE = 1 as const;
-    static LOOP_TRACK = 2 as const;
-
     static SCHEDULED_TIMEOUT_MS = 300000 as const;
 
     static async search(terms: string) {

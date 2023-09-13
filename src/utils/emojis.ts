@@ -16,4 +16,6 @@ export const emojis = {
     blueLargeSquare: "🟦",
     blackSmallSquare: "▪️",
     radioButton: "🔘",
+    repeat: "🔁",
+    repeatSingle: "🔂",
 };

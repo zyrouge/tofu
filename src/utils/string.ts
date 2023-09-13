@@ -24,4 +24,8 @@ export class StringUtils {
         }
         return chunks;
     }
+
+    static capitalizeWord(word: string) {
+        return `${word[0]?.toUpperCase() ?? ""}${word.slice(1)}`;
+    }
 }

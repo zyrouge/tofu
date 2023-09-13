@@ -34,6 +34,7 @@ import { isProduction } from "@/utils/env";
 import { TofuFilteredGuilds } from "@/core/modules/filteredGuilds";
 import { aboutCommand } from "@/commands/utils/about";
 import { uptimeCommand } from "@/commands/developer/uptime";
+import { loopCommand } from "@/commands/music/loop";
 
 export class Tofu {
     bot: CommandClient;
@@ -135,6 +136,7 @@ export class Tofu {
         geniusCommand,
         aboutCommand,
         uptimeCommand,
+        loopCommand,
     ];
 
     static events: TofuEvent<any>[] = [
