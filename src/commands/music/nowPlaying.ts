@@ -2,6 +2,7 @@ import { TofuCommand } from "@/core/command";
 import { ErisUtils } from "@/utils/eris";
 import { emojis } from "@/utils/emojis";
 import { colors } from "@/utils/colors";
+import { DurationUtils } from "@/utils/duration";
 
 export const nowPlayingCommand: TofuCommand = {
     config: {
@@ -32,6 +33,11 @@ export const nowPlayingCommand: TofuCommand = {
                             `Position: ${connection.index + 1} of ${
                                 connection.songs.length
                             }`,
+                            "",
+                            createProgressBar(
+                                connection.playedDuration / 1000,
+                                parseDuration(song.metadata.duration)
+                            ),
                         ].join("\n"),
                         image: {
                             url: song.metadata.thumbnail,
@@ -42,4 +48,35 @@ export const nowPlayingCommand: TofuCommand = {
             },
         };
     },
+};
+
+const progressBarMaxCount = 10;
+const progressBarPavement = emojis.blackSmallSquare;
+const progressBarMarker = emojis.radioButton;
+
+const createProgressBar = (current?: number, total?: number) => {
+    const ratio = current && total ? current / total : 0;
+    const pavement = Array(progressBarMaxCount).fill(progressBarPavement);
+    pavement.splice(
+        Math.floor(ratio * progressBarMaxCount),
+        0,
+        progressBarMarker
+    );
+    const bar = `\`${pavement.join("")}\``;
+    return `${prettyDuration(current)} ${bar} ${prettyDuration(total)}`;
+};
+
+const parseDuration = (value?: string) => {
+    if (!value) return;
+    const parsed = DurationUtils.parseShortFormatted(value);
+    if (!parsed) return;
+    return DurationUtils.durationToSeconds(parsed);
+};
+
+const prettyDuration = (value?: number) => {
+    const pretty =
+        typeof value === "number"
+            ? DurationUtils.prettySeconds(value, "short")
+            : "-";
+    return `\`${pretty}\``;
 };

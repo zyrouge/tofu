@@ -1,5 +1,5 @@
 import { TofuCommand } from "@/core/command";
-import { PrettyDuration } from "@/utils/duration";
+import { DurationUtils } from "@/utils/duration";
 import { ErisUtils } from "@/utils/eris";
 
 export const uptimeCommand: TofuCommand = {
@@ -10,7 +10,7 @@ export const uptimeCommand: TofuCommand = {
     invoke: async (tofu, __) => {
         return {
             message: ErisUtils.robotMessage(
-                `I've been up and running for **${PrettyDuration.prettyMilliseconds(
+                `I've been up and running for **${DurationUtils.prettyMilliseconds(
                     tofu.uptime,
                     "human"
                 )}**!`

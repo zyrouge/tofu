@@ -2,7 +2,7 @@ import { VoiceChannel, VoiceConnection } from "eris";
 import * as ytext from "youtube-ext";
 import { Tofu } from "@/core/tofu";
 import { log } from "@/utils/log";
-import { PrettyDuration } from "@/utils/duration";
+import { DurationUtils } from "@/utils/duration";
 
 export interface TofuSongMetadata {
     title: string;
@@ -92,7 +92,6 @@ export class TofuMusicConnection {
     async play() {
         const song = this.songs[this.index];
         if (!song) return false;
-        console.log(song.metadata.duration);
         const stream = await TofuMusicUtils.generateSongStream(song);
         if (!stream) {
             this.onVoiceConnectionEnd();
@@ -251,8 +250,8 @@ export class TofuMusicConnection {
         return this.voiceConnection.paused;
     }
 
-    get duration() {
-        return this.voiceConnection.frameDuration;
+    get playedDuration() {
+        return this.voiceConnection.current?.playTime ?? 0;
     }
 }
 
@@ -382,7 +381,7 @@ export class TofuMusicUtils {
                 }
                 return pv;
             }, video.thumbnails[0])?.url,
-            duration: PrettyDuration.prettySeconds(
+            duration: DurationUtils.prettySeconds(
                 parseInt(video.duration.lengthSec),
                 "short"
             ),

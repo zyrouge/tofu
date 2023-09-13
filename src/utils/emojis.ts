@@ -12,4 +12,8 @@ export const emojis = {
     speakerHigh: "🔊",
     nextTrack: "⏭️",
     memo: "📝",
+    blackMediumSquare: "◼️",
+    blueLargeSquare: "🟦",
+    blackSmallSquare: "▪️",
+    radioButton: "🔘",
 };
