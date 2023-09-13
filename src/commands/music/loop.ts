@@ -21,6 +21,7 @@ export const loopCommand: TofuCommand = {
                 name: "mode",
                 description: "Loop mode.",
                 type: Constants.ApplicationCommandOptionTypes.STRING,
+                autocomplete: true,
             },
         ],
     },
