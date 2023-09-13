@@ -66,13 +66,21 @@ export class DurationUtils {
 
     static formatHuman({ hours, minutes, seconds }: ParsedDuration) {
         let output = "";
-        if (hours > 0) {
+        if (hours === 1) {
+            output += `${hours} hour, `;
+        } else if (hours > 1) {
             output += `${hours} hours, `;
         }
-        if (minutes > 0) {
+        if (minutes === 1) {
+            output += `${minutes} minute and `;
+        } else if (minutes > 1) {
             output += `${minutes} minutes and `;
         }
-        output += `${seconds} seconds`;
+        if (seconds === 1) {
+            output += `${seconds} second`;
+        } else {
+            output += `${seconds} seconds`;
+        }
         return output;
     }
 
