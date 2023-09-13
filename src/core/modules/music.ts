@@ -208,6 +208,12 @@ export class TofuMusicConnection {
         this.index = -1;
     }
 
+    clearQueue() {
+        this.index = -1;
+        this.songs = [];
+        this.stopCurrentSong();
+    }
+
     isVoiceChannelEmpty() {
         const voiceChannel = this.tofu.bot.getChannel(this.voiceChannelId);
         if (!(voiceChannel instanceof VoiceChannel)) {
