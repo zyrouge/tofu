@@ -50,7 +50,7 @@ export const nowPlayingCommand: TofuCommand = {
     },
 };
 
-const progressBarMaxCount = 10;
+const progressBarMaxCount = 15;
 const progressBarPavement = emojis.blackSmallSquare;
 const progressBarMarker = emojis.radioButton;
 
