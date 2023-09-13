@@ -101,7 +101,7 @@ export class TofuMusicConnection {
         const stream = await TofuMusicUtils.generateSongStream(song);
         if (!stream) {
             this.onVoiceConnectionEnd();
-            return;
+            return false;
         }
         this.voiceConnection.play(stream, {
             inlineVolume: true,
