@@ -31,7 +31,7 @@ export const loopCommand: TofuCommand = {
         const nMode = ErisUtils.getCommandInteractionStringOptionValue(
             interaction,
             "mode"
-        );
+        )?.toLowerCase();
         const connection = tofu.music.getConnection(guildID);
         if (!connection) {
             return {
