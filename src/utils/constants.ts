@@ -8,8 +8,8 @@ export const constants = {
     urls: {
         logos: {
             zyrouge:
-                "https://raw.githubusercontent.com/zyrouge/zyrouge.is-a.dev/main/public/icon.png",
-            tofu: "https://raw.githubusercontent.com/zyrouge/tofu/main/media/logo-transparent.png",
+                "https://raw.githubusercontent.com/zyrouge/zyrouge/main/media/logo.png",
+            tofu: "https://raw.githubusercontent.com/zyrouge/tofu/main/media/logo.png",
         },
         banners: {
             tofu: "https://raw.githubusercontent.com/zyrouge/tofu/main/media/banner.png",

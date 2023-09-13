@@ -1,4 +1,5 @@
 import { TofuCommand } from "@/core/command";
+import { colors } from "@/utils/colors";
 import { constants } from "@/utils/constants";
 
 export const aboutCommand: TofuCommand = {
@@ -26,6 +27,7 @@ export const aboutCommand: TofuCommand = {
                                 ].join("\n"),
                             },
                         ],
+                        color: colors.orange500,
                         image: {
                             url: constants.urls.banners.tofu,
                         },
