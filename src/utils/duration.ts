@@ -23,7 +23,7 @@ export class PrettyDuration {
         return formatter({
             hours: Math.floor(total / 3600),
             minutes: Math.floor(total / 60) % 60,
-            seconds: total % 60,
+            seconds: Math.floor(total % 60),
         });
     }
 
