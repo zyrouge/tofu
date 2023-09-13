@@ -1,7 +1,7 @@
 export const constants = {
     project: {
         name: "Tofu",
-        description: "Made to be a sidekick for its creator.",
+        description: "Made to be a sidekick for it's creator.",
         license: "MIT",
         author: "Zyrouge",
     },
