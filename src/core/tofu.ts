@@ -35,6 +35,7 @@ import { TofuFilteredGuilds } from "@/core/modules/filteredGuilds";
 import { aboutCommand } from "@/commands/utils/about";
 import { uptimeCommand } from "@/commands/developer/uptime";
 import { loopCommand } from "@/commands/music/loop";
+import { errorEvent } from "@/events/error";
 
 export class Tofu {
     bot: CommandClient;
@@ -145,6 +146,7 @@ export class Tofu {
         voiceChannelJoinEvent,
         voiceChannelLeaveEvent,
         voiceChannelSwitchEvent,
+        errorEvent,
     ];
 
     static async create(mode: string) {
