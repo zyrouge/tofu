@@ -110,6 +110,7 @@ export const playCommand: TofuCommand = {
             tofu.bot.user.id
         );
         if (
+            !voiceChannelPermissions.has("viewChannel") ||
             !voiceChannelPermissions.has("voiceConnect") ||
             !voiceChannelPermissions.has("voiceSpeak")
         ) {
