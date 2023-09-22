@@ -13,7 +13,6 @@ export const interactionCreateEvent: TofuEvent<"interactionCreate"> = {
     action: async (tofu, interaction) => {
         if (!tofu.botReady) return;
         if (interaction instanceof CommandInteraction) {
-            await interaction.defer();
             await onCommandInteration(tofu, interaction);
         } else if (interaction instanceof AutocompleteInteraction) {
             await onAutoCompleteInteration(tofu, interaction);
@@ -32,6 +31,7 @@ const onCommandInteration = async (
         return;
     }
     try {
+        await interaction.defer();
         const action = tofu.commandInvokes.get(interaction.data.name);
         if (!action) return;
         const result = await action(tofu, interaction);
@@ -42,10 +42,15 @@ const onCommandInteration = async (
         }
         await interaction.createMessage(result.message, result.file);
     } catch (err) {
-        if (!isProduction()) {
+        if (isProduction()) {
             throw err;
         }
         log.error(`Command interaction failed. (${log.errorColor(`${err}`)})`);
+        await interaction.createMessage(
+            ErisUtils.failureMessage(
+                "Command interaction encountered an error."
+            )
+        );
     }
 };
 

@@ -1,6 +1,13 @@
 import logColors from "ansi-colors";
+import { CuteLogSymbolsAscii } from "cute-log-symbols";
 
 export class Logger {
+    infoSymbol = CuteLogSymbolsAscii.info;
+    successSymbol = CuteLogSymbolsAscii.success;
+    warnSymbol = CuteLogSymbolsAscii.warning;
+    errorSymbol = CuteLogSymbolsAscii.error;
+    debugSymbol = CuteLogSymbolsAscii.info;
+
     infoColor = logColors.blueBright;
     successColor = logColors.greenBright;
     warnColor = logColors.yellowBright;
@@ -9,23 +16,23 @@ export class Logger {
     timeColor = logColors.dim;
 
     info(text: string) {
-        this.log("i", this.infoColor, text);
+        this.log(this.infoSymbol, this.infoColor, text);
     }
 
     success(text: string) {
-        this.log("✓", this.successColor, text);
+        this.log(this.successSymbol, this.successColor, text);
     }
 
     warn(text: string) {
-        this.log("‼", this.warnColor, text);
+        this.log(this.warnSymbol, this.warnColor, text);
     }
 
     error(text: string) {
-        this.log("×", this.errorColor, text);
+        this.log(this.errorSymbol, this.errorColor, text);
     }
 
     debug(text: string) {
-        this.log("i", this.debugColor, text);
+        this.log(this.debugSymbol, this.debugColor, text);
     }
 
     log(level: string, levelStyle: logColors.StyleFunction, text: string) {

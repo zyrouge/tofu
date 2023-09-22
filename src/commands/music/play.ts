@@ -1,4 +1,4 @@
-import { Constants } from "eris";
+import { Constants, VoiceChannel } from "eris";
 import * as ytext from "youtube-ext";
 import { TofuCommand } from "@/core/command";
 import { ErisUtils } from "@/utils/eris";
@@ -100,6 +100,19 @@ export const playCommand: TofuCommand = {
             return {
                 message: ErisUtils.failureMessage(
                     `No results for \`${terms}\`.`
+                ),
+            };
+        }
+        const voiceChannel = tofu.bot.getChannel(
+            voiceChannelId
+        ) as VoiceChannel;
+        const voiceChannelPermissions = voiceChannel.permissionsOf(
+            tofu.bot.user.id
+        );
+        if (!voiceChannelPermissions.has("voiceSpeak")) {
+            return {
+                message: ErisUtils.failureMessage(
+                    `I do not have permissions to speak in <#${voiceChannelId}>.`
                 ),
             };
         }
