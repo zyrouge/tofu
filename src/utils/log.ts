@@ -1,3 +1,4 @@
+import { inspect } from "util";
 import logColors from "ansi-colors";
 import { CuteLogSymbolsAscii } from "cute-log-symbols";
 
@@ -39,6 +40,10 @@ export class Logger {
         console.log(
             `${levelStyle(`[${level}]`)} ${this.timeColor(this.time())} ${text}`
         );
+    }
+
+    logError(error: any) {
+        console.error(this.errorColor(inspect(error)));
     }
 
     time() {

@@ -45,7 +45,8 @@ const onCommandInteration = async (
         if (isProduction()) {
             throw err;
         }
-        log.error(`Command interaction failed. (${log.errorColor(`${err}`)})`);
+        log.error("Command interaction failed.");
+        log.logError(err);
         await interaction.createMessage(
             ErisUtils.failureMessage(
                 "Command interaction encountered an error."
@@ -69,10 +70,7 @@ const onAutoCompleteInteration = async (
         if (!isProduction()) {
             throw err;
         }
-        log.error(
-            `Auto-complete command interaction failed. (${log.errorColor(
-                `${err}`
-            )})`
-        );
+        log.error("Auto-complete command interaction failed.");
+        log.logError(err);
     }
 };

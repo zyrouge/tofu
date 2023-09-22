@@ -93,9 +93,8 @@ export class Tofu {
                     if (!isProduction()) {
                         throw err;
                     }
-                    log.error(
-                        `Bot event failed. (${log.errorColor(`${err}`)})`
-                    );
+                    log.error("Bot event failed.");
+                    log.logError(err);
                 }
             };
             switch (x.config.type) {

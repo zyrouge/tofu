@@ -7,6 +7,7 @@ export const errorEvent: TofuEvent<"error"> = {
         type: "on",
     },
     action: async (_, err) => {
-        log.error(`Bot encountered an error. (${log.errorColor(`${err}`)})`);
+        log.error("Bot encountered an error.");
+        log.logError(err);
     },
 };

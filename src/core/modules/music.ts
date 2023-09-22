@@ -137,12 +137,9 @@ export class TofuMusicConnection {
 
     async onVoiceConnectionError(err: unknown) {
         log.error(
-            `Voice connection error in guild "${
-                this.guildId
-            }" and voice channel "${this.voiceChannelId}" (${log.errorColor(
-                `${err}`
-            )})`
+            `Voice connection error in guild "${this.guildId}" and voice channel "${this.voiceChannelId}".`
         );
+        log.logError(err);
     }
 
     async pause() {
@@ -271,10 +268,9 @@ export class TofuMusicUtils {
             return videos;
         } catch (err) {
             log.error(
-                `Unable to generate YouTube search results for "${terms}" (${log.errorColor(
-                    `${err}`
-                )})`
+                `Unable to generate YouTube search results for "${terms}".`
             );
+            log.logError(err);
             return [];
         }
     }
@@ -285,10 +281,9 @@ export class TofuMusicUtils {
             return video;
         } catch (err) {
             log.error(
-                `Unable to fetch YouTube video information for "${url}" (${log.errorColor(
-                    `${err}`
-                )})`
+                `Unable to fetch YouTube video information for "${url}".`
             );
+            log.logError(err);
         }
     }
 
@@ -298,10 +293,9 @@ export class TofuMusicUtils {
             return playlist;
         } catch (err) {
             log.error(
-                `Unable to fetch YouTube playlist information for "${url}" (${log.errorColor(
-                    `${err}`
-                )})`
+                `Unable to fetch YouTube playlist information for "${url}".`
             );
+            log.logError(err);
         }
     }
 
@@ -320,10 +314,9 @@ export class TofuMusicUtils {
             return stream;
         } catch (err) {
             log.error(
-                `Unable to generate YouTube song stream for "${
-                    song.metadata.url
-                }" (${log.errorColor(`${err}`)})`
+                `Unable to generate YouTube song stream for "${song.metadata.url}".`
             );
+            log.logError(err);
         }
     }
 

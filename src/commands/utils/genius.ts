@@ -62,10 +62,9 @@ export const geniusCommand: TofuCommand = {
                 url = song?.url;
             } catch (err) {
                 log.error(
-                    `Unable to generate Genius search results for "${terms}" (${log.errorColor(
-                        `${err}`
-                    )})`
+                    `Unable to generate Genius search results for "${terms}".`
                 );
+                log.logError(err);
             }
         }
         if (!url) {
@@ -79,11 +78,8 @@ export const geniusCommand: TofuCommand = {
         try {
             song = await genius.songs.scrape(url);
         } catch (err) {
-            log.error(
-                `Unable to scrape Genius information from "${url}" (${log.errorColor(
-                    `${err}`
-                )})`
-            );
+            log.error(`Unable to scrape Genius information from "${url}".`);
+            log.logError(err);
         }
         if (!song) {
             return {
