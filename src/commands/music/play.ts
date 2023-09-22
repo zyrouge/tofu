@@ -109,10 +109,13 @@ export const playCommand: TofuCommand = {
         const voiceChannelPermissions = voiceChannel.permissionsOf(
             tofu.bot.user.id
         );
-        if (!voiceChannelPermissions.has("voiceSpeak")) {
+        if (
+            !voiceChannelPermissions.has("voiceConnect") ||
+            !voiceChannelPermissions.has("voiceSpeak")
+        ) {
             return {
                 message: ErisUtils.failureMessage(
-                    `I do not have permissions to speak in <#${voiceChannelId}>.`
+                    `I do not have permissions to connect or speak in <#${voiceChannelId}>.`
                 ),
             };
         }
