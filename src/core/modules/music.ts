@@ -203,15 +203,15 @@ export class TofuMusicConnection {
     }
 
     destroy() {
+        this.clearQueue();
         this.tofu.music.deleteConnection(this.guildId);
         this.voiceConnection.disconnect();
-        this.index = -1;
     }
 
     clearQueue() {
+        this.stopCurrentSong();
         this.index = -1;
         this.songs = [];
-        this.stopCurrentSong();
     }
 
     isVoiceChannelEmpty() {

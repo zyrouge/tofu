@@ -36,6 +36,7 @@ import { aboutCommand } from "@/commands/utils/about";
 import { uptimeCommand } from "@/commands/developer/uptime";
 import { loopCommand } from "@/commands/music/loop";
 import { errorEvent } from "@/events/error";
+import { clearCommand } from "@/commands/music/clear";
 
 export class Tofu {
     bot: CommandClient;
@@ -138,6 +139,7 @@ export class Tofu {
         aboutCommand,
         uptimeCommand,
         loopCommand,
+        clearCommand,
     ];
 
     static events: TofuEvent<any>[] = [
