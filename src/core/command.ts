@@ -13,7 +13,7 @@ export interface TofuCommandReply {
     file?: FileContent | FileContent[];
 }
 
-export type TofuCommandAutoComplete = (
+export type TofuCommandAutocomplete = (
     tofu: Tofu,
     interaction: AutocompleteInteraction
 ) => Promise<ApplicationCommandOptionChoice[] | undefined>;
@@ -25,6 +25,6 @@ export type TofuCommandInvoke = (
 
 export interface TofuCommand {
     config: Omit<ChatInputApplicationCommandStructure, "type">;
-    autocomplete?: TofuCommandAutoComplete;
+    autocomplete?: TofuCommandAutocomplete;
     invoke: TofuCommandInvoke;
 }

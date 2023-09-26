@@ -5,7 +5,7 @@ import { TofuConfig, TofuConfigSchema } from "@/core/config";
 import {
     TofuCommand,
     TofuCommandInvoke,
-    TofuCommandAutoComplete,
+    TofuCommandAutocomplete,
 } from "@/core/command";
 import { TofuEvent } from "@/core/event";
 import { paths } from "@/utils/paths";
@@ -45,7 +45,7 @@ export class Tofu {
 
     startedAt = Date.now();
     botReady = false;
-    commandAutoCompletes = new Map<string, TofuCommandAutoComplete>();
+    commandAutocompletes = new Map<string, TofuCommandAutocomplete>();
     commandInvokes = new Map<string, TofuCommandInvoke>();
     pingServer?: PingServer;
     music: TofuMusic;
@@ -75,7 +75,7 @@ export class Tofu {
                 type: Constants.ApplicationCommandTypes.CHAT_INPUT,
             });
             if (x.autocomplete) {
-                this.commandAutoCompletes.set(commandName, x.autocomplete);
+                this.commandAutocompletes.set(commandName, x.autocomplete);
             }
             this.commandInvokes.set(commandName, x.invoke);
             log.debug(`Registered ${commandName} command.`);

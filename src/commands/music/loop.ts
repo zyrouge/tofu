@@ -5,7 +5,7 @@ import { emojis } from "@/utils/emojis";
 import { TofuLoop } from "@/core/modules/music";
 import { StringUtils } from "@/utils/string";
 
-const loopModeValuesAutoComplete: ApplicationCommandOptionChoice[] = (
+const loopModeValuesAutocomplete: ApplicationCommandOptionChoice[] = (
     Object.keys(TofuLoop) as TofuLoop[]
 ).map((x) => ({
     name: StringUtils.capitalizeWord(x),
@@ -25,7 +25,7 @@ export const loopCommand: TofuCommand = {
             },
         ],
     },
-    autocomplete: async (_, __) => loopModeValuesAutoComplete,
+    autocomplete: async (_, __) => loopModeValuesAutocomplete,
     invoke: async (tofu, interaction) => {
         const guildID = interaction.guildID!;
         const nMode = ErisUtils.getCommandInteractionStringOptionValue(

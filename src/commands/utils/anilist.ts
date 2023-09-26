@@ -9,6 +9,11 @@ import { colors } from "@/utils/colors";
 import { emojis } from "@/utils/emojis";
 import { ArrayUtils } from "@/utils/array";
 
+const mediaTypeValuesAutocomplete = ["Anime", "Manga"].map((x) => ({
+    name: x,
+    value: x,
+}));
+
 export const anilistCommand: TofuCommand = {
     config: {
         name: "anilist",
@@ -44,15 +49,12 @@ export const anilistCommand: TofuCommand = {
         );
         if (!focused) return [];
         if (focused?.name === "type") {
-            return [
-                { name: "Anime", value: "ANIME" },
-                { name: "Manga", value: "MANGA" },
-            ];
+            return mediaTypeValuesAutocomplete;
         }
         const type = ErisUtils.getAutocompleteInteractionStringOptionValue(
             interaction,
             "type"
-        );
+        )?.toUpperCase();
         if (!type) return [];
         const terms = ErisUtils.getAutocompleteInteractionStringOptionValue(
             interaction,

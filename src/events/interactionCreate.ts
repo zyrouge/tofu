@@ -15,7 +15,7 @@ export const interactionCreateEvent: TofuEvent<"interactionCreate"> = {
         if (interaction instanceof CommandInteraction) {
             await onCommandInteration(tofu, interaction);
         } else if (interaction instanceof AutocompleteInteraction) {
-            await onAutoCompleteInteration(tofu, interaction);
+            await onAutocompleteInteration(tofu, interaction);
         }
     },
 };
@@ -55,13 +55,13 @@ const onCommandInteration = async (
     }
 };
 
-const onAutoCompleteInteration = async (
+const onAutocompleteInteration = async (
     tofu: Tofu,
     interaction: AutocompleteInteraction
 ) => {
     if (!ErisUtils.isInteractionAllowed(tofu, interaction)) return;
     try {
-        const action = tofu.commandAutoCompletes.get(interaction.data.name);
+        const action = tofu.commandAutocompletes.get(interaction.data.name);
         if (!action) return;
         const result = await action(tofu, interaction);
         if (!result) return;
