@@ -1,13 +1,15 @@
 import { inspect } from "util";
 import logColors from "ansi-colors";
-import { CuteLogSymbolsAscii } from "cute-log-symbols";
+import { createCuteLogSymbols } from "cute-log-symbols";
+
+const logSymbols = createCuteLogSymbols({ mode: "ascii" });
 
 export class Logger {
-    infoSymbol = CuteLogSymbolsAscii.info;
-    successSymbol = CuteLogSymbolsAscii.success;
-    warnSymbol = CuteLogSymbolsAscii.warning;
-    errorSymbol = CuteLogSymbolsAscii.error;
-    debugSymbol = CuteLogSymbolsAscii.info;
+    infoSymbol = logSymbols.info;
+    successSymbol = logSymbols.success;
+    warnSymbol = logSymbols.warning;
+    errorSymbol = logSymbols.error;
+    debugSymbol = logSymbols.info;
 
     infoColor = logColors.blueBright;
     successColor = logColors.greenBright;

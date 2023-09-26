@@ -3,6 +3,7 @@ import {
     AutocompleteInteraction,
     CommandInteraction,
     Constants,
+    InteractionDataOptionsBoolean,
     InteractionDataOptionsNumber,
     InteractionDataOptionsString,
 } from "eris";
@@ -23,10 +24,22 @@ export class ErisUtils {
         optionName: string
     ) {
         const option = interaction.data.options?.find(
-            (x) =>
+            (x): x is InteractionDataOptionsString =>
                 x.name === optionName &&
                 x.type === Constants.ApplicationCommandOptionTypes.STRING
-        ) as InteractionDataOptionsString;
+        );
+        return option?.value;
+    }
+
+    static getAutocompleteInteractionBooleanOptionValue(
+        interaction: AutocompleteInteraction,
+        optionName: string
+    ) {
+        const option = interaction.data.options?.find(
+            (x): x is InteractionDataOptionsBoolean =>
+                x.name === optionName &&
+                x.type === Constants.ApplicationCommandOptionTypes.BOOLEAN
+        );
         return option?.value;
     }
 
@@ -34,12 +47,11 @@ export class ErisUtils {
         interaction: CommandInteraction,
         optionName: string
     ) {
-        const option =
-            interaction.data.options?.find<InteractionDataOptionsString>(
-                (x): x is InteractionDataOptionsString =>
-                    x.name === optionName &&
-                    x.type === Constants.ApplicationCommandOptionTypes.STRING
-            );
+        const option = interaction.data.options?.find(
+            (x): x is InteractionDataOptionsString =>
+                x.name === optionName &&
+                x.type === Constants.ApplicationCommandOptionTypes.STRING
+        );
         return option?.value;
     }
 
@@ -47,12 +59,11 @@ export class ErisUtils {
         interaction: CommandInteraction,
         optionName: string
     ) {
-        const option =
-            interaction.data.options?.find<InteractionDataOptionsNumber>(
-                (x): x is InteractionDataOptionsNumber =>
-                    x.name === optionName &&
-                    x.type === Constants.ApplicationCommandOptionTypes.NUMBER
-            );
+        const option = interaction.data.options?.find(
+            (x): x is InteractionDataOptionsNumber =>
+                x.name === optionName &&
+                x.type === Constants.ApplicationCommandOptionTypes.NUMBER
+        );
         return option?.value;
     }
 

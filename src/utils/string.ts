@@ -28,4 +28,9 @@ export class StringUtils {
     static capitalizeWord(word: string) {
         return `${word[0]?.toUpperCase() ?? ""}${word.slice(1)}`;
     }
+
+    static normalizeText(text: string) {
+        text = text.toLowerCase().replaceAll("_", " ");
+        return this.capitalizeWord(text);
+    }
 }

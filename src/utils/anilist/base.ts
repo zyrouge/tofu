@@ -1,0 +1,33 @@
+import Undici from "undici";
+
+export class Anilist {
+    static apiUrl = "https://graphql.anilist.co";
+    static faviconUrl = "https://anilist.co/img/icons/favicon-32x32.png";
+
+    static siteUrlIdRegex = /https:\/\/anilist\.co\/\w+\/(\d+)/;
+
+    static parseIdFromSiteUrl(siteUrl: string) {
+        const id = siteUrl.match(this.siteUrlIdRegex)?.[1];
+        if (!id) return;
+        return parseInt(id);
+    }
+
+    static async query<Variables extends {}, Result extends {}>(
+        query: string,
+        variables: Variables
+    ) {
+        const resp = await Undici.request(this.apiUrl, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                Accept: "application/json",
+            },
+            body: JSON.stringify({
+                query,
+                variables,
+            }),
+        });
+        const json = await resp.body.json();
+        return (json as any).data as Result;
+    }
+}

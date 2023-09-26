@@ -37,6 +37,7 @@ import { uptimeCommand } from "@/commands/developer/uptime";
 import { loopCommand } from "@/commands/music/loop";
 import { errorEvent } from "@/events/error";
 import { clearCommand } from "@/commands/music/clear";
+import { anilistCommand } from "@/commands/utils/anilist";
 
 export class Tofu {
     bot: CommandClient;
@@ -108,7 +109,7 @@ export class Tofu {
             }
             log.debug(`Registered ${eventName} event.`);
         }
-        log.info(`Registered ${Tofu.commands.length} commands.`);
+        log.info(`Registered ${Tofu.commands.length} events.`);
     }
 
     async loadPingServer() {
@@ -139,6 +140,7 @@ export class Tofu {
         uptimeCommand,
         loopCommand,
         clearCommand,
+        anilistCommand,
     ];
 
     static events: TofuEvent<any>[] = [

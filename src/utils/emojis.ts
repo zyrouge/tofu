@@ -18,4 +18,6 @@ export const emojis = {
     radioButton: "🔘",
     repeat: "🔁",
     repeatSingle: "🔂",
+    nsfw: "🔞",
+    sparkles: "✨",
 };
