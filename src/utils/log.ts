@@ -9,13 +9,11 @@ export class Logger {
     successSymbol = logSymbols.success;
     warnSymbol = logSymbols.warning;
     errorSymbol = logSymbols.error;
-    debugSymbol = logSymbols.info;
 
     infoColor = logColors.blueBright;
     successColor = logColors.greenBright;
     warnColor = logColors.yellowBright;
     errorColor = logColors.redBright;
-    debugColor = logColors.dim;
     timeColor = logColors.dim;
 
     info(text: string) {
@@ -32,10 +30,6 @@ export class Logger {
 
     error(text: string) {
         this.log(this.errorSymbol, this.errorColor, text);
-    }
-
-    debug(text: string) {
-        this.log(this.debugSymbol, this.debugColor, text);
     }
 
     log(level: string, levelStyle: logColors.StyleFunction, text: string) {

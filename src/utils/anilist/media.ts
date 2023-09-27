@@ -38,7 +38,7 @@ export interface AnilistMediaResult {
         averageScore?: number;
         popularity?: number;
         coverImage: {
-            medium?: string;
+            large?: string;
         };
         bannerImage?: string;
     };
@@ -79,7 +79,7 @@ export class AnilistMedia {
           averageScore
           popularity
           coverImage {
-            medium
+            large
           }
           bannerImage
         }

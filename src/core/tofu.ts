@@ -78,7 +78,7 @@ export class Tofu {
                 this.commandAutocompletes.set(commandName, x.autocomplete);
             }
             this.commandInvokes.set(commandName, x.invoke);
-            log.debug(`Registered ${commandName} command.`);
+            log.info(`Registered ${commandName} command.`);
         }
         await this.bot.bulkEditCommands(slashCommands);
         log.info(`Registered ${Tofu.commands.length} commands.`);
@@ -107,7 +107,7 @@ export class Tofu {
                     this.bot.on(eventName, listener);
                     break;
             }
-            log.debug(`Registered ${eventName} event.`);
+            log.info(`Registered ${eventName} event.`);
         }
         log.info(`Registered ${Tofu.commands.length} events.`);
     }

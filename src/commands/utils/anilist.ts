@@ -131,6 +131,24 @@ function prettyMediaFormat(format: string) {
     return mediaPrettyFormats[format] ?? StringUtils.normalizeText(format);
 }
 
+const htmlToMarkdownReplacers: Record<string, string> = {
+    br: "\n",
+    i: "_",
+    cite: "_",
+    b: "*",
+    strong: "*",
+    u: "__",
+};
+
+function prettyDescription(text: string) {
+    return text
+        .replaceAll(
+            /<\/?(\w+)>/g,
+            (_, tag) => htmlToMarkdownReplacers[tag] ?? ""
+        )
+        .replaceAll(/\n{2,}/g, "\n\n");
+}
+
 function createEmbed(media: AnilistMediaResult["Media"]): EmbedOptions {
     let title = media.title.english ?? media.title.romaji ?? media.title.native;
     if (media.isAdult) {
@@ -145,7 +163,7 @@ function createEmbed(media: AnilistMediaResult["Media"]): EmbedOptions {
             url: media.siteUrl,
         },
         thumbnail: {
-            url: media.coverImage.medium,
+            url: media.coverImage.large,
         },
         image: {
             url: media.bannerImage,
@@ -154,14 +172,14 @@ function createEmbed(media: AnilistMediaResult["Media"]): EmbedOptions {
             {
                 name: "Title",
                 value: [
-                    `English: **${media.title.english ?? "?"}**`,
-                    `Romaji: **${media.title.romaji ?? "?"}**`,
-                    `Native: **${media.title.native}**`,
+                    `\`EN\` ${media.title.english ?? "?"}`,
+                    `\`RO\` ${media.title.romaji ?? "?"}`,
+                    `\`JP\` ${media.title.native}`,
                 ].join("\n"),
             },
             typeof media.description === "string" && {
                 name: "Description",
-                value: media.description?.replaceAll(/(<br>)+/g, "\n"),
+                value: prettyDescription(media.description),
             },
             {
                 name: "Type",
