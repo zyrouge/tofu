@@ -30,9 +30,14 @@
         "node": "18.17.1"
     },
     "devDependencies": {
+        "@trivago/prettier-plugin-sort-imports": "^4.2.0",
         "@types/fs-extra": "^11.0.2",
         "@types/node": "^20.7.0",
+        "@typescript-eslint/eslint-plugin": "^6.7.3",
+        "@typescript-eslint/parser": "^6.7.3",
         "cross-env": "^7.0.3",
+        "eslint": "^8.50.0",
+        "prettier": "^3.0.3",
         "tsx": "^3.13.0",
         "typescript": "^5.2.2"
     }

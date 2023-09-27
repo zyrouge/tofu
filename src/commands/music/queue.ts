@@ -1,7 +1,7 @@
 import { Constants } from "eris";
 import { TofuCommand } from "@/core/command";
-import { ErisUtils } from "@/utils/eris";
 import { emojis } from "@/utils/emojis";
+import { ErisUtils } from "@/utils/eris";
 import { StringUtils } from "@/utils/string";
 
 export const queueCommand: TofuCommand = {
@@ -21,7 +21,7 @@ export const queueCommand: TofuCommand = {
         const page =
             ErisUtils.getCommandInteractionNumberOptionValue(
                 interaction,
-                "page"
+                "page",
             ) ?? 1;
         const connection = tofu.music.getConnection(guildID);
         if (!connection) {
@@ -37,7 +37,7 @@ export const queueCommand: TofuCommand = {
         let content = "";
         content += `${ErisUtils.prettyMessage(
             emojis.music,
-            `**Queue** (${page}/${totalPages})`
+            `**Queue** (${page}/${totalPages})`,
         )}`;
         content += "\n";
         if (songs.length > 0) {

@@ -1,13 +1,13 @@
 import { Constants, EmbedOptions } from "eris";
 import { TofuCommand } from "@/core/command";
-import { ErisUtils } from "@/utils/eris";
-import { StringUtils } from "@/utils/string";
-import { AnilistSearch } from "@/utils/anilist/search";
 import { Anilist } from "@/utils/anilist/base";
 import { AnilistMedia, AnilistMediaResult } from "@/utils/anilist/media";
+import { AnilistSearch } from "@/utils/anilist/search";
+import { ArrayUtils } from "@/utils/array";
 import { colors } from "@/utils/colors";
 import { emojis } from "@/utils/emojis";
-import { ArrayUtils } from "@/utils/array";
+import { ErisUtils } from "@/utils/eris";
+import { StringUtils } from "@/utils/string";
 
 const mediaTypeValuesAutocomplete = ["Anime", "Manga"].map((x) => ({
     name: x,
@@ -45,7 +45,7 @@ export const anilistCommand: TofuCommand = {
     },
     autocomplete: async (_, interaction) => {
         const focused = interaction.data.options.find(
-            (x) => "focused" in x && x.focused
+            (x) => "focused" in x && x.focused,
         );
         if (!focused) return [];
         if (focused?.name === "type") {
@@ -53,18 +53,18 @@ export const anilistCommand: TofuCommand = {
         }
         const type = ErisUtils.getAutocompleteInteractionStringOptionValue(
             interaction,
-            "type"
+            "type",
         )?.toUpperCase();
         if (!type) return [];
         const terms = ErisUtils.getAutocompleteInteractionStringOptionValue(
             interaction,
-            "terms"
+            "terms",
         );
         if (!terms || terms.length < 3) return;
         const isAdult =
             ErisUtils.getAutocompleteInteractionBooleanOptionValue(
                 interaction,
-                "adult"
+                "adult",
             ) ?? false;
         const result = await AnilistSearch.search({
             terms,
@@ -81,12 +81,12 @@ export const anilistCommand: TofuCommand = {
     invoke: async (_, interaction) => {
         const terms = ErisUtils.getCommandInteractionStringOptionValue(
             interaction,
-            "terms"
+            "terms",
         );
         if (!terms) {
             return {
                 message: ErisUtils.failureMessage(
-                    "You did not provide a value for `terms`."
+                    "You did not provide a value for `terms`.",
                 ),
             };
         }
@@ -94,7 +94,7 @@ export const anilistCommand: TofuCommand = {
         if (!id) {
             return {
                 message: ErisUtils.failureMessage(
-                    "You did not provide a valid media id."
+                    "You did not provide a valid media id.",
                 ),
             };
         }
@@ -144,7 +144,7 @@ function prettyDescription(text: string) {
     return text
         .replaceAll(
             /<\/?(\w+)>/g,
-            (_, tag) => htmlToMarkdownReplacers[tag] ?? ""
+            (_, tag) => htmlToMarkdownReplacers[tag] ?? "",
         )
         .replaceAll(/\n{2,}/g, "\n\n");
 }
@@ -156,9 +156,7 @@ function createEmbed(media: AnilistMediaResult["Media"]): EmbedOptions {
     }
     return {
         author: {
-            name: `${
-                media.title.english ?? media.title.romaji ?? media.title.native
-            }${media.isAdult ? ` ${emojis.nsfw}` : ""}`,
+            name: title,
             icon_url: Anilist.faviconUrl,
             url: media.siteUrl,
         },
@@ -196,7 +194,7 @@ function createEmbed(media: AnilistMediaResult["Media"]): EmbedOptions {
             {
                 name: "Start & End Date",
                 value: `${stringifyMediaDate(
-                    media.startDate
+                    media.startDate,
                 )} to ${stringifyMediaDate(media.endDate)}`,
             },
             {

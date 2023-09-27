@@ -1,4 +1,3 @@
-import { Tofu } from "@/core/tofu";
 import {
     AutocompleteInteraction,
     CommandInteraction,
@@ -7,12 +6,13 @@ import {
     InteractionDataOptionsNumber,
     InteractionDataOptionsString,
 } from "eris";
+import { Tofu } from "@/core/tofu";
 import { emojis } from "@/utils/emojis";
 
 export class ErisUtils {
     static isInteractionAllowed(
         tofu: Tofu,
-        interaction: CommandInteraction | AutocompleteInteraction
+        interaction: CommandInteraction | AutocompleteInteraction,
     ) {
         const { guildID } = interaction;
         if (!guildID) return;
@@ -21,48 +21,48 @@ export class ErisUtils {
 
     static getAutocompleteInteractionStringOptionValue(
         interaction: AutocompleteInteraction,
-        optionName: string
+        optionName: string,
     ) {
         const option = interaction.data.options?.find(
             (x): x is InteractionDataOptionsString =>
                 x.name === optionName &&
-                x.type === Constants.ApplicationCommandOptionTypes.STRING
+                x.type === Constants.ApplicationCommandOptionTypes.STRING,
         );
         return option?.value;
     }
 
     static getAutocompleteInteractionBooleanOptionValue(
         interaction: AutocompleteInteraction,
-        optionName: string
+        optionName: string,
     ) {
         const option = interaction.data.options?.find(
             (x): x is InteractionDataOptionsBoolean =>
                 x.name === optionName &&
-                x.type === Constants.ApplicationCommandOptionTypes.BOOLEAN
+                x.type === Constants.ApplicationCommandOptionTypes.BOOLEAN,
         );
         return option?.value;
     }
 
     static getCommandInteractionStringOptionValue(
         interaction: CommandInteraction,
-        optionName: string
+        optionName: string,
     ) {
         const option = interaction.data.options?.find(
             (x): x is InteractionDataOptionsString =>
                 x.name === optionName &&
-                x.type === Constants.ApplicationCommandOptionTypes.STRING
+                x.type === Constants.ApplicationCommandOptionTypes.STRING,
         );
         return option?.value;
     }
 
     static getCommandInteractionNumberOptionValue(
         interaction: CommandInteraction,
-        optionName: string
+        optionName: string,
     ) {
         const option = interaction.data.options?.find(
             (x): x is InteractionDataOptionsNumber =>
                 x.name === optionName &&
-                x.type === Constants.ApplicationCommandOptionTypes.NUMBER
+                x.type === Constants.ApplicationCommandOptionTypes.NUMBER,
         );
         return option?.value;
     }

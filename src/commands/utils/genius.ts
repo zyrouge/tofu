@@ -1,11 +1,11 @@
 import { Constants } from "eris";
 import * as GeniusLyrics from "genius-lyrics";
 import { TofuCommand } from "@/core/command";
+import { colors } from "@/utils/colors";
 import { emojis } from "@/utils/emojis";
 import { ErisUtils } from "@/utils/eris";
-import { StringUtils } from "@/utils/string";
 import { log } from "@/utils/log";
-import { colors } from "@/utils/colors";
+import { StringUtils } from "@/utils/string";
 
 const genius = new GeniusLyrics.Client();
 
@@ -26,7 +26,7 @@ export const geniusCommand: TofuCommand = {
     autocomplete: async (_, interaction) => {
         const terms = ErisUtils.getAutocompleteInteractionStringOptionValue(
             interaction,
-            "terms"
+            "terms",
         );
         if (!terms || terms.length < 3) return;
         const songs = await genius.songs.search(terms);
@@ -44,12 +44,12 @@ export const geniusCommand: TofuCommand = {
     invoke: async (_, interaction) => {
         const terms = ErisUtils.getCommandInteractionStringOptionValue(
             interaction,
-            "terms"
+            "terms",
         );
         if (!terms) {
             return {
                 message: ErisUtils.failureMessage(
-                    "You did not provide a value for `terms`."
+                    "You did not provide a value for `terms`.",
                 ),
             };
         }
@@ -62,7 +62,7 @@ export const geniusCommand: TofuCommand = {
                 url = song?.url;
             } catch (err) {
                 log.error(
-                    `Unable to generate Genius search results for "${terms}".`
+                    `Unable to generate Genius search results for "${terms}".`,
                 );
                 log.logError(err);
             }
@@ -70,7 +70,7 @@ export const geniusCommand: TofuCommand = {
         if (!url) {
             return {
                 message: ErisUtils.failureMessage(
-                    `No results for \`${terms}\`.`
+                    `No results for \`${terms}\`.`,
                 ),
             };
         }
@@ -84,21 +84,23 @@ export const geniusCommand: TofuCommand = {
         if (!song) {
             return {
                 message: ErisUtils.failureMessage(
-                    `Unable to scrape information from \`${url}\`.`
+                    `Unable to scrape information from \`${url}\`.`,
                 ),
             };
         }
-        const info: Extract<
+        const info = song.data.entities.songs[
+            song.data.songPage.song
+        ]! as Extract<
             GeniusLyrics.ScrapedSongData["entities"]["songs"][string],
             { fullTitle: string }
-        > = song.data.entities.songs[song.data.songPage.song]! as any;
+        >;
         const artist = song.data.entities.artists[info.primaryArtist]!;
         const lyrics = song.lyrics() || "[No lyrics]";
         const [chunk1, ...chunks] = StringUtils.chunk(lyrics);
         const totalPages = 1 + chunks.length;
         const footerPrefix = ErisUtils.prettyMessage(
             emojis.memo,
-            "genius-lyrics"
+            "genius-lyrics",
         );
         await interaction.createMessage({
             embeds: [

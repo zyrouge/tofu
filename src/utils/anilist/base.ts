@@ -12,9 +12,9 @@ export class Anilist {
         return parseInt(id);
     }
 
-    static async query<Variables extends {}, Result extends {}>(
+    static async query<Variables extends object, Result extends object>(
         query: string,
-        variables: Variables
+        variables: Variables,
     ) {
         const resp = await Undici.request(this.apiUrl, {
             method: "POST",
@@ -28,6 +28,6 @@ export class Anilist {
             }),
         });
         const json = await resp.body.json();
-        return (json as any).data as Result;
+        return (json as Record<string, unknown>).data as Result;
     }
 }

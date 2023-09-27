@@ -1,8 +1,8 @@
 import { ApplicationCommandOptionChoice, Constants } from "eris";
 import { TofuCommand } from "@/core/command";
-import { ErisUtils } from "@/utils/eris";
-import { emojis } from "@/utils/emojis";
 import { TofuLoop } from "@/core/modules/music";
+import { emojis } from "@/utils/emojis";
+import { ErisUtils } from "@/utils/eris";
 import { StringUtils } from "@/utils/string";
 
 const loopModeValuesAutocomplete: ApplicationCommandOptionChoice[] = (
@@ -25,12 +25,12 @@ export const loopCommand: TofuCommand = {
             },
         ],
     },
-    autocomplete: async (_, __) => loopModeValuesAutocomplete,
+    autocomplete: async () => loopModeValuesAutocomplete,
     invoke: async (tofu, interaction) => {
         const guildID = interaction.guildID!;
         const nMode = ErisUtils.getCommandInteractionStringOptionValue(
             interaction,
-            "mode"
+            "mode",
         )?.toLowerCase();
         const connection = tofu.music.getConnection(guildID);
         if (!connection) {
@@ -42,7 +42,7 @@ export const loopCommand: TofuCommand = {
             return {
                 message: ErisUtils.prettyMessage(
                     loopToEmoji(connection.loop),
-                    `Loop is set to **${connection.loop}**.`
+                    `Loop is set to **${connection.loop}**.`,
                 ),
             };
         }
@@ -50,7 +50,7 @@ export const loopCommand: TofuCommand = {
         if (connection.voiceChannelId !== voiceChannelId) {
             return {
                 message: ErisUtils.failureMessage(
-                    `You must be in <#${connection.voiceChannelId}> to use this command.`
+                    `You must be in <#${connection.voiceChannelId}> to use this command.`,
                 ),
             };
         }
@@ -63,7 +63,7 @@ export const loopCommand: TofuCommand = {
         return {
             message: ErisUtils.prettyMessage(
                 loopToEmoji(connection.loop),
-                `Loop set to **${connection.loop}**.`
+                `Loop set to **${connection.loop}**.`,
             ),
         };
     },

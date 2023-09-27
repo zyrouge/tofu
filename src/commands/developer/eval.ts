@@ -23,7 +23,7 @@ export const evalCommand: TofuCommand = {
             return {
                 message: {
                     content: ErisUtils.failureMessage(
-                        "You do not have enough permissions to run this command."
+                        "You do not have enough permissions to run this command.",
                     ),
                     flags: Constants.MessageFlags.EPHEMERAL,
                 },
@@ -31,19 +31,19 @@ export const evalCommand: TofuCommand = {
         }
         const code = ErisUtils.getCommandInteractionStringOptionValue(
             interaction,
-            "code"
+            "code",
         );
         if (!code) {
             return {
                 message: {
                     content: ErisUtils.failureMessage(
-                        "You did not provide a value for `code`."
+                        "You did not provide a value for `code`.",
                     ),
                     flags: Constants.MessageFlags.EPHEMERAL,
                 },
             };
         }
-        let success: boolean, result: any;
+        let success: boolean, result: unknown;
         try {
             let evaled = eval(code);
             if (evaled instanceof Promise) {
@@ -77,14 +77,14 @@ export const evalCommand: TofuCommand = {
     },
 };
 
-function clean(tofu: Tofu, data: string) {
+function clean(tofu: Tofu, data: unknown) {
     const content =
         typeof data === "string" ? data : inspect(data, { depth: 1 });
     return (
         content
             .replaceAll(
                 tofu.config.discordToken,
-                "mfa.VkO_2G4Qv3T--NO--lWetW_tjND--TOKEN--QFTm6YGtzq9PH--4U--tG0"
+                "mfa.VkO_2G4Qv3T--NO--lWetW_tjND--TOKEN--QFTm6YGtzq9PH--4U--tG0",
             )
             .replace(/`/g, "`" + String.fromCharCode(8203))
             .replace(/@/g, "@" + String.fromCharCode(8203))

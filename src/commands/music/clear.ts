@@ -18,7 +18,7 @@ export const clearCommand: TofuCommand = {
         if (connection.voiceChannelId !== voiceChannelId) {
             return {
                 message: ErisUtils.failureMessage(
-                    `You must be in <#${connection.voiceChannelId}> to use this command.`
+                    `You must be in <#${connection.voiceChannelId}> to use this command.`,
                 ),
             };
         }

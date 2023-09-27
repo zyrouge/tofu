@@ -9,8 +9,8 @@ export const readyEvent: TofuEvent<"ready"> = {
     action: async (tofu) => {
         log.success(
             `Logged in as ${log.successColor(
-                `${tofu.bot.user.username}#${tofu.bot.user.discriminator}`
-            )}!`
+                `${tofu.bot.user.username}#${tofu.bot.user.discriminator}`,
+            )}!`,
         );
         await tofu.loadCommands();
         const status = tofu.config.discordStatus;
@@ -18,7 +18,7 @@ export const readyEvent: TofuEvent<"ready"> = {
             status?.type ?? "online",
             status?.activity?.text
                 ? { name: status.activity.text, type: status.activity.type }
-                : undefined
+                : undefined,
         );
         tofu.botReady = true;
     },

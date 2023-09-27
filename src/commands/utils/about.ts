@@ -7,7 +7,7 @@ export const aboutCommand: TofuCommand = {
         name: "about",
         description: `About ${constants.project.name}.`,
     },
-    invoke: async (_, __) => {
+    invoke: async () => {
         return {
             message: {
                 embeds: [

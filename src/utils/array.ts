@@ -3,7 +3,7 @@ export class ArrayUtils {
     static filterTruthy<T>(values: (T | "" | false | null | undefined)[]): T[] {
         const filtered: T[] = [];
         for (const x of values) {
-            if (!!x) {
+            if (x) {
                 filtered.push(x);
             }
         }

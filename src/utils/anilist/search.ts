@@ -40,7 +40,7 @@ export class AnilistSearch {
     static async search(options: AnilistSearchVariables) {
         return Anilist.query<AnilistSearchVariables, AnilistSearchResult>(
             this.query,
-            options
+            options,
         );
     }
 }

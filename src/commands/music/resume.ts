@@ -19,7 +19,7 @@ export const resumeCommand: TofuCommand = {
         if (connection.voiceChannelId !== voiceChannelId) {
             return {
                 message: ErisUtils.failureMessage(
-                    `You must be in <#${connection.voiceChannelId}> to use this command.`
+                    `You must be in <#${connection.voiceChannelId}> to use this command.`,
                 ),
             };
         }
@@ -27,14 +27,14 @@ export const resumeCommand: TofuCommand = {
         if (!resumed) {
             return {
                 message: ErisUtils.robotMessage(
-                    "Music playback is already resumed."
+                    "Music playback is already resumed.",
                 ),
             };
         }
         return {
             message: ErisUtils.prettyMessage(
                 emojis.play,
-                "Music playback resumed."
+                "Music playback resumed.",
             ),
         };
     },

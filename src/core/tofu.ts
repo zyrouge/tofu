@@ -1,43 +1,43 @@
-import p from "path";
 import { ApplicationCommandStructure, CommandClient, Constants } from "eris";
 import { pathExists, readFile } from "fs-extra";
-import { TofuConfig, TofuConfigSchema } from "@/core/config";
+import p from "path";
+import { evalCommand } from "@/commands/developer/eval";
+import { pingCommand } from "@/commands/developer/ping";
+import { uptimeCommand } from "@/commands/developer/uptime";
+import { clearCommand } from "@/commands/music/clear";
+import { dequeueCommand } from "@/commands/music/dequeue";
+import { jumpCommand } from "@/commands/music/jump";
+import { loopCommand } from "@/commands/music/loop";
+import { nowPlayingCommand } from "@/commands/music/nowPlaying";
+import { pauseCommand } from "@/commands/music/pause";
+import { playCommand } from "@/commands/music/play";
+import { queueCommand } from "@/commands/music/queue";
+import { resumeCommand } from "@/commands/music/resume";
+import { skipCommand } from "@/commands/music/skip";
+import { stopCommand } from "@/commands/music/stop";
+import { volumeCommand } from "@/commands/music/volume";
+import { aboutCommand } from "@/commands/utils/about";
+import { anilistCommand } from "@/commands/utils/anilist";
+import { geniusCommand } from "@/commands/utils/genius";
 import {
     TofuCommand,
     TofuCommandInvoke,
     TofuCommandAutocomplete,
 } from "@/core/command";
+import { TofuConfig, TofuConfigSchema } from "@/core/config";
 import { TofuEvent } from "@/core/event";
-import { paths } from "@/utils/paths";
-import { log } from "@/utils/log";
-import { PingServer, startPingServer } from "@/utils/pingServer";
-import { pingCommand } from "@/commands/developer/ping";
-import { readyEvent } from "@/events/ready";
-import { interactionCreateEvent } from "@/events/interactionCreate";
-import { evalCommand } from "@/commands/developer/eval";
+import { TofuFilteredGuilds } from "@/core/modules/filteredGuilds";
 import { TofuMusic } from "@/core/modules/music";
-import { playCommand } from "@/commands/music/play";
-import { queueCommand } from "@/commands/music/queue";
-import { nowPlayingCommand } from "@/commands/music/nowPlaying";
-import { pauseCommand } from "@/commands/music/pause";
-import { resumeCommand } from "@/commands/music/resume";
-import { stopCommand } from "@/commands/music/stop";
-import { skipCommand } from "@/commands/music/skip";
-import { volumeCommand } from "@/commands/music/volume";
-import { jumpCommand } from "@/commands/music/jump";
+import { errorEvent } from "@/events/error";
+import { interactionCreateEvent } from "@/events/interactionCreate";
+import { readyEvent } from "@/events/ready";
 import { voiceChannelJoinEvent } from "@/events/voiceChannelJoin";
 import { voiceChannelLeaveEvent } from "@/events/voiceChannelLeave";
 import { voiceChannelSwitchEvent } from "@/events/voiceChannelSwitch";
-import { dequeueCommand } from "@/commands/music/dequeue";
-import { geniusCommand } from "@/commands/utils/genius";
 import { isProduction } from "@/utils/env";
-import { TofuFilteredGuilds } from "@/core/modules/filteredGuilds";
-import { aboutCommand } from "@/commands/utils/about";
-import { uptimeCommand } from "@/commands/developer/uptime";
-import { loopCommand } from "@/commands/music/loop";
-import { errorEvent } from "@/events/error";
-import { clearCommand } from "@/commands/music/clear";
-import { anilistCommand } from "@/commands/utils/anilist";
+import { log } from "@/utils/log";
+import { paths } from "@/utils/paths";
+import { PingServer, startPingServer } from "@/utils/pingServer";
 
 export class Tofu {
     bot: CommandClient;
@@ -87,6 +87,7 @@ export class Tofu {
     async loadEvents() {
         for (const x of Tofu.events) {
             const eventName = x.config.name;
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
             const listener = async (...args: any[]) => {
                 try {
                     await x.action(this, ...args);
@@ -143,6 +144,7 @@ export class Tofu {
         anilistCommand,
     ];
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     static events: TofuEvent<any>[] = [
         readyEvent,
         interactionCreateEvent,
@@ -166,7 +168,7 @@ export class Tofu {
         return tofu;
     }
 
-    static parseConfig(config: any): TofuConfig | undefined {
+    static parseConfig(config: unknown): TofuConfig | undefined {
         const parsed = TofuConfigSchema.safeParse(config);
         if (parsed.success) return parsed.data;
     }

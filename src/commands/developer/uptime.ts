@@ -7,13 +7,13 @@ export const uptimeCommand: TofuCommand = {
         name: "uptime",
         description: "Check bot's uptime.",
     },
-    invoke: async (tofu, __) => {
+    invoke: async (tofu) => {
         return {
             message: ErisUtils.robotMessage(
                 `I've been up and running for **${DurationUtils.prettyMilliseconds(
                     tofu.uptime,
-                    "human"
-                )}**!`
+                    "human",
+                )}**!`,
             ),
         };
     },

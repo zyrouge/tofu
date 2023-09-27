@@ -1,10 +1,10 @@
 import { Constants, VoiceChannel } from "eris";
 import * as ytext from "youtube-ext";
 import { TofuCommand } from "@/core/command";
-import { ErisUtils } from "@/utils/eris";
 import { TofuMusicUtils, TofuSong } from "@/core/modules/music";
-import { StringUtils } from "@/utils/string";
 import { emojis } from "@/utils/emojis";
+import { ErisUtils } from "@/utils/eris";
+import { StringUtils } from "@/utils/string";
 
 export const playCommand: TofuCommand = {
     config: {
@@ -25,7 +25,7 @@ export const playCommand: TofuCommand = {
         if (!voiceChannelId) return;
         const terms = ErisUtils.getAutocompleteInteractionStringOptionValue(
             interaction,
-            "terms"
+            "terms",
         );
         if (!terms || terms.length < 3) return;
         const videos = await TofuMusicUtils.search(terms);
@@ -40,19 +40,19 @@ export const playCommand: TofuCommand = {
         if (!voiceChannelId) {
             return {
                 message: ErisUtils.failureMessage(
-                    "You must be in a voice channel to use this command."
+                    "You must be in a voice channel to use this command.",
                 ),
             };
         }
         const memberId = interaction.member!.id;
         const terms = ErisUtils.getCommandInteractionStringOptionValue(
             interaction,
-            "terms"
+            "terms",
         );
         if (!terms) {
             return {
                 message: ErisUtils.failureMessage(
-                    "You did not provide a value for `terms`."
+                    "You did not provide a value for `terms`.",
                 ),
             };
         }
@@ -90,7 +90,7 @@ export const playCommand: TofuCommand = {
                 songs.push({
                     metadata:
                         TofuMusicUtils.convertSearchVideoToSongMetadata(
-                            searchVideo
+                            searchVideo,
                         ),
                     addedBy: memberId,
                 });
@@ -99,15 +99,15 @@ export const playCommand: TofuCommand = {
         if (songs.length === 0) {
             return {
                 message: ErisUtils.failureMessage(
-                    `No results for \`${terms}\`.`
+                    `No results for \`${terms}\`.`,
                 ),
             };
         }
         const voiceChannel = tofu.bot.getChannel(
-            voiceChannelId
+            voiceChannelId,
         ) as VoiceChannel;
         const voiceChannelPermissions = voiceChannel.permissionsOf(
-            tofu.bot.user.id
+            tofu.bot.user.id,
         );
         if (
             !voiceChannelPermissions.has("viewChannel") ||
@@ -116,18 +116,18 @@ export const playCommand: TofuCommand = {
         ) {
             return {
                 message: ErisUtils.failureMessage(
-                    `I do not have permissions to connect or speak in <#${voiceChannelId}>.`
+                    `I do not have permissions to connect or speak in <#${voiceChannelId}>.`,
                 ),
             };
         }
         const connection = await tofu.music.createOrGetConnection(
             guildID,
-            voiceChannelId
+            voiceChannelId,
         );
         if (connection.voiceChannelId !== voiceChannelId) {
             return {
                 message: ErisUtils.failureMessage(
-                    `You must be in <#${connection.voiceChannelId}> to use this command.`
+                    `You must be in <#${connection.voiceChannelId}> to use this command.`,
                 ),
             };
         }
@@ -138,13 +138,13 @@ export const playCommand: TofuCommand = {
             return {
                 message: ErisUtils.prettyMessage(
                     emojis.music,
-                    `Playing [**${title}**](${url})!`
+                    `Playing [**${title}**](${url})!`,
                 ),
             };
         }
         return {
             message: ErisUtils.successMessage(
-                `Enqueued [**${title}**](${url}).`
+                `Enqueued [**${title}**](${url}).`,
             ),
         };
     },

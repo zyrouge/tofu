@@ -1,8 +1,8 @@
 import { TofuCommand } from "@/core/command";
-import { ErisUtils } from "@/utils/eris";
-import { emojis } from "@/utils/emojis";
 import { colors } from "@/utils/colors";
 import { DurationUtils } from "@/utils/duration";
+import { emojis } from "@/utils/emojis";
+import { ErisUtils } from "@/utils/eris";
 
 export const nowPlayingCommand: TofuCommand = {
     config: {
@@ -24,7 +24,7 @@ export const nowPlayingCommand: TofuCommand = {
                     {
                         title: ErisUtils.prettyMessage(
                             emojis.music,
-                            "Now Playing"
+                            "Now Playing",
                         ),
                         description: [
                             `Title: **${song.metadata.title}**`,
@@ -36,7 +36,7 @@ export const nowPlayingCommand: TofuCommand = {
                             "",
                             createProgressBar(
                                 connection.playedDuration / 1000,
-                                parseDuration(song.metadata.duration)
+                                parseDuration(song.metadata.duration),
                             ),
                         ].join("\n"),
                         image: {
@@ -60,7 +60,7 @@ const createProgressBar = (current?: number, total?: number) => {
     pavement.splice(
         Math.floor(ratio * progressBarMaxCount),
         0,
-        progressBarMarker
+        progressBarMarker,
     );
     const bar = `\`${pavement.join("")}\``;
     return `${prettyDuration(current)} ${bar} ${prettyDuration(total)}`;

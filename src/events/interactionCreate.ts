@@ -2,8 +2,8 @@ import { AutocompleteInteraction, CommandInteraction } from "eris";
 import { TofuEvent } from "@/core/event";
 import { Tofu } from "@/core/tofu";
 import { isProduction } from "@/utils/env";
-import { log } from "@/utils/log";
 import { ErisUtils } from "@/utils/eris";
+import { log } from "@/utils/log";
 
 export const interactionCreateEvent: TofuEvent<"interactionCreate"> = {
     config: {
@@ -22,7 +22,7 @@ export const interactionCreateEvent: TofuEvent<"interactionCreate"> = {
 
 const onCommandInteration = async (
     tofu: Tofu,
-    interaction: CommandInteraction
+    interaction: CommandInteraction,
 ) => {
     if (!ErisUtils.isInteractionAllowed(tofu, interaction)) {
         await interaction.createMessage({
@@ -49,15 +49,15 @@ const onCommandInteration = async (
         log.logError(err);
         await interaction.createMessage(
             ErisUtils.failureMessage(
-                "Command interaction encountered an error."
-            )
+                "Command interaction encountered an error.",
+            ),
         );
     }
 };
 
 const onAutocompleteInteration = async (
     tofu: Tofu,
-    interaction: AutocompleteInteraction
+    interaction: AutocompleteInteraction,
 ) => {
     if (!ErisUtils.isInteractionAllowed(tofu, interaction)) return;
     try {

@@ -1,7 +1,7 @@
 import { Constants } from "eris";
 import { TofuCommand } from "@/core/command";
-import { ErisUtils } from "@/utils/eris";
 import { emojis } from "@/utils/emojis";
+import { ErisUtils } from "@/utils/eris";
 
 export const volumeCommand: TofuCommand = {
     config: {
@@ -19,7 +19,7 @@ export const volumeCommand: TofuCommand = {
         const guildID = interaction.guildID!;
         const nVolume = ErisUtils.getCommandInteractionNumberOptionValue(
             interaction,
-            "volume"
+            "volume",
         );
         const connection = tofu.music.getConnection(guildID);
         if (!connection) {
@@ -31,7 +31,7 @@ export const volumeCommand: TofuCommand = {
             return {
                 message: ErisUtils.prettyMessage(
                     volumeToEmoji(connection.volume),
-                    `Volume is set to **${connection.volume}**.`
+                    `Volume is set to **${connection.volume}**.`,
                 ),
             };
         }
@@ -39,7 +39,7 @@ export const volumeCommand: TofuCommand = {
         if (connection.voiceChannelId !== voiceChannelId) {
             return {
                 message: ErisUtils.failureMessage(
-                    `You must be in <#${connection.voiceChannelId}> to use this command.`
+                    `You must be in <#${connection.voiceChannelId}> to use this command.`,
                 ),
             };
         }
@@ -47,7 +47,7 @@ export const volumeCommand: TofuCommand = {
         return {
             message: ErisUtils.prettyMessage(
                 volumeToEmoji(connection.volume),
-                `Volume set to **${connection.volume}**.`
+                `Volume set to **${connection.volume}**.`,
             ),
         };
     },

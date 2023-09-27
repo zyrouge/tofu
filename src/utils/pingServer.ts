@@ -38,7 +38,7 @@ export const startPingServer = (options: PingServerOptions) => {
             host: options.host,
             port: options.port,
         };
-        let onError = (err: any) => {
+        const onError = (err: unknown) => {
             server.removeListener("error", onError);
             reject(err);
         };
@@ -47,8 +47,8 @@ export const startPingServer = (options: PingServerOptions) => {
             server.removeListener("error", onError);
             log.info(
                 `Ping server started at ${log.infoColor(
-                    `http://${options.host}:${options.port}/ping`
-                )}.`
+                    `http://${options.host}:${options.port}/ping`,
+                )}.`,
             );
             resolve(pingServer);
         });

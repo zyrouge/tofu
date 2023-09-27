@@ -1,8 +1,8 @@
 import { VoiceChannel, VoiceConnection } from "eris";
 import * as ytext from "youtube-ext";
 import { Tofu } from "@/core/tofu";
-import { log } from "@/utils/log";
 import { DurationUtils } from "@/utils/duration";
+import { log } from "@/utils/log";
 
 export interface TofuSongMetadata {
     title: string;
@@ -39,13 +39,13 @@ export class TofuMusic {
             voiceChannelId,
             {
                 selfDeaf: true,
-            }
+            },
         );
         const connection = new TofuMusicConnection(
             this.tofu,
             guildId,
             voiceChannelId,
-            voiceConnection
+            voiceConnection,
         );
         this.connections.set(guildId, connection);
         return connection;
@@ -76,7 +76,7 @@ export class TofuMusicConnection {
         public readonly tofu: Tofu,
         public readonly guildId: string,
         public voiceChannelId: string,
-        public readonly voiceConnection: VoiceConnection
+        public readonly voiceConnection: VoiceConnection,
     ) {
         this.voiceConnection.on("end", () => {
             this.onVoiceConnectionEnd();
@@ -137,7 +137,7 @@ export class TofuMusicConnection {
 
     async onVoiceConnectionError(err: unknown) {
         log.error(
-            `Voice connection error in guild "${this.guildId}" and voice channel "${this.voiceChannelId}".`
+            `Voice connection error in guild "${this.guildId}" and voice channel "${this.voiceChannelId}".`,
         );
         log.logError(err);
     }
@@ -268,7 +268,7 @@ export class TofuMusicUtils {
             return videos;
         } catch (err) {
             log.error(
-                `Unable to generate YouTube search results for "${terms}".`
+                `Unable to generate YouTube search results for "${terms}".`,
             );
             log.logError(err);
             return [];
@@ -281,7 +281,7 @@ export class TofuMusicUtils {
             return video;
         } catch (err) {
             log.error(
-                `Unable to fetch YouTube video information for "${url}".`
+                `Unable to fetch YouTube video information for "${url}".`,
             );
             log.logError(err);
         }
@@ -293,7 +293,7 @@ export class TofuMusicUtils {
             return playlist;
         } catch (err) {
             log.error(
-                `Unable to fetch YouTube playlist information for "${url}".`
+                `Unable to fetch YouTube playlist information for "${url}".`,
             );
             log.logError(err);
         }
@@ -304,7 +304,7 @@ export class TofuMusicUtils {
             const streamInfo = await ytext.extractStreamInfo(song.metadata.url);
             const formats = await ytext.getFormats(streamInfo);
             const isLive = ytext.utils.isLiveContentURL(
-                streamInfo.hlsManifestUrl
+                streamInfo.hlsManifestUrl,
             );
             const format = isLive
                 ? this.findBestLiveStream(formats)
@@ -314,7 +314,7 @@ export class TofuMusicUtils {
             return stream;
         } catch (err) {
             log.error(
-                `Unable to generate YouTube song stream for "${song.metadata.url}".`
+                `Unable to generate YouTube song stream for "${song.metadata.url}".`,
             );
             log.logError(err);
         }
@@ -377,7 +377,7 @@ export class TofuMusicUtils {
             }, video.thumbnails[0])?.url,
             duration: DurationUtils.prettySeconds(
                 parseInt(video.duration.lengthSec),
-                "short"
+                "short",
             ),
         };
         return metadata;

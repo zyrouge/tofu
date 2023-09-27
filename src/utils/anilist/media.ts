@@ -89,7 +89,7 @@ export class AnilistMedia {
     static async get(options: AnilistMediaVariables) {
         return Anilist.query<AnilistMediaVariables, AnilistMediaResult>(
             this.query,
-            options
+            options,
         );
     }
 }

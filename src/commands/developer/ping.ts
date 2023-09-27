@@ -7,7 +7,7 @@ export const pingCommand: TofuCommand = {
         name: "ping",
         description: "Ping pong!",
     },
-    invoke: async (_, __) => {
+    invoke: async () => {
         return {
             message: ErisUtils.prettyMessage(emojis.pingPong, "Pong!"),
         };

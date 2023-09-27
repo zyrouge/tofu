@@ -18,12 +18,12 @@ export const dequeueCommand: TofuCommand = {
         const guildID = interaction.guildID!;
         const position = ErisUtils.getCommandInteractionNumberOptionValue(
             interaction,
-            "position"
+            "position",
         );
         if (!position) {
             return {
                 message: ErisUtils.failureMessage(
-                    "You did not provide a value for `position`."
+                    "You did not provide a value for `position`.",
                 ),
             };
         }
@@ -37,7 +37,7 @@ export const dequeueCommand: TofuCommand = {
         if (connection.voiceChannelId !== voiceChannelId) {
             return {
                 message: ErisUtils.failureMessage(
-                    `You must be in <#${connection.voiceChannelId}> to use this command.`
+                    `You must be in <#${connection.voiceChannelId}> to use this command.`,
                 ),
             };
         }
@@ -45,7 +45,7 @@ export const dequeueCommand: TofuCommand = {
         if (!connection.hasSongAt(index)) {
             return {
                 message: ErisUtils.failureMessage(
-                    `No song is queued at position **${position}**.`
+                    `No song is queued at position **${position}**.`,
                 ),
             };
         }
@@ -57,7 +57,7 @@ export const dequeueCommand: TofuCommand = {
         }
         return {
             message: ErisUtils.successMessage(
-                `Dequeued [**${song.metadata.title}**](${song.metadata.url}).`
+                `Dequeued [**${song.metadata.title}**](${song.metadata.url}).`,
             ),
         };
     },

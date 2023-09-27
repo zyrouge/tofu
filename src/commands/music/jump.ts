@@ -19,12 +19,12 @@ export const jumpCommand: TofuCommand = {
         const guildID = interaction.guildID!;
         const position = ErisUtils.getCommandInteractionNumberOptionValue(
             interaction,
-            "position"
+            "position",
         );
         if (typeof position !== "number") {
             return {
                 message: ErisUtils.failureMessage(
-                    "You did not provide a value for `position`."
+                    "You did not provide a value for `position`.",
                 ),
             };
         }
@@ -38,7 +38,7 @@ export const jumpCommand: TofuCommand = {
         if (connection.voiceChannelId !== voiceChannelId) {
             return {
                 message: ErisUtils.failureMessage(
-                    `You must be in <#${connection.voiceChannelId}> to use this command.`
+                    `You must be in <#${connection.voiceChannelId}> to use this command.`,
                 ),
             };
         }
@@ -47,7 +47,7 @@ export const jumpCommand: TofuCommand = {
         if (!canJump) {
             return {
                 message: ErisUtils.failureMessage(
-                    `Cannot jump to song at position **${position}**.`
+                    `Cannot jump to song at position **${position}**.`,
                 ),
             };
         }
@@ -55,7 +55,7 @@ export const jumpCommand: TofuCommand = {
         return {
             message: ErisUtils.prettyMessage(
                 emojis.nextTrack,
-                `Jumped to song at position **${position}**.`
+                `Jumped to song at position **${position}**.`,
             ),
         };
     },
