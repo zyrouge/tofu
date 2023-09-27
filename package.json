@@ -7,7 +7,8 @@
     "scripts": {
         "start": "npm run typecheck && cross-env NODE_ENV=production tsx ./src/index.ts",
         "dev": "npm run typecheck && cross-env NODE_ENV=development tsx ./src/index.ts",
-        "typecheck": "tsc"
+        "typecheck": "tsc",
+        "lint": "prettier . --check && eslint"
     },
     "dependencies": {
         "ansi-colors": "^4.1.3",
