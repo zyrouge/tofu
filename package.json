@@ -17,10 +17,10 @@
         "fs-extra": "^11.1.1",
         "genius-lyrics": "^4.4.6",
         "m3u8stream": "^0.8.6",
-        "opusscript": "^0.1.0",
-        "undici": "^5.25.2",
-        "youtube-ext": "^1.1.14",
-        "zod": "^3.22.2"
+        "opusscript": "^0.1.1",
+        "undici": "^5.26.3",
+        "youtube-ext": "^1.1.15",
+        "zod": "^3.22.4"
     },
     "repository": {
         "url": "https://github.com/zyrouge/tofu"
@@ -33,11 +33,11 @@
     "devDependencies": {
         "@trivago/prettier-plugin-sort-imports": "^4.2.0",
         "@types/fs-extra": "^11.0.2",
-        "@types/node": "^20.7.0",
-        "@typescript-eslint/eslint-plugin": "^6.7.3",
-        "@typescript-eslint/parser": "^6.7.3",
+        "@types/node": "^20.8.6",
+        "@typescript-eslint/eslint-plugin": "^6.7.5",
+        "@typescript-eslint/parser": "^6.7.5",
         "cross-env": "^7.0.3",
-        "eslint": "^8.50.0",
+        "eslint": "^8.51.0",
         "prettier": "^3.0.3",
         "tsx": "^3.13.0",
         "typescript": "^5.2.2"
