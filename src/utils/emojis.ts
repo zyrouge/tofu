@@ -20,4 +20,12 @@ export const emojis = {
     repeatSingle: "🔂",
     nsfw: "🔞",
     sparkles: "✨",
+    frown: "☹️",
+    upArrow: "⬆️",
+    downArrow: "⬇️",
+    magnet: "🧲",
+    package: "📦",
+    calendar: "📅",
+    pushPin: "📌",
+    id: "🆔",
 };

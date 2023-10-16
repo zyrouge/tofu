@@ -3,4 +3,5 @@ export const colors = {
     orange500: 0xf97316,
     geniusYellow: 0xffff64,
     anilistBlue: 0x00abff,
+    nyaaBlue: 0x286090,
 };

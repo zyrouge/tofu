@@ -8,6 +8,6 @@ module.exports = {
     plugins: ["@typescript-eslint"],
     root: true,
     rules: {
-        indent: ["error", 4],
+        indent: ["error", 4, { SwitchCase: 1 }],
     },
 };

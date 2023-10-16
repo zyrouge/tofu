@@ -19,6 +19,8 @@ import { volumeCommand } from "@/commands/music/volume";
 import { aboutCommand } from "@/commands/utils/about";
 import { anilistCommand } from "@/commands/utils/anilist";
 import { geniusCommand } from "@/commands/utils/genius";
+import { nyaaMagnetCommand } from "@/commands/utils/nyaa-magnet";
+import { nyaaSearchCommand } from "@/commands/utils/nyaa-search";
 import {
     TofuCommand,
     TofuCommandInvoke,
@@ -110,7 +112,7 @@ export class Tofu {
             }
             log.info(`Registered ${eventName} event.`);
         }
-        log.info(`Registered ${Tofu.commands.length} events.`);
+        log.info(`Registered ${Tofu.events.length} events.`);
     }
 
     async loadPingServer() {
@@ -142,6 +144,8 @@ export class Tofu {
         loopCommand,
         clearCommand,
         anilistCommand,
+        nyaaSearchCommand,
+        nyaaMagnetCommand,
     ];
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
