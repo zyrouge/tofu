@@ -1,4 +1,5 @@
 import { VoiceChannel, VoiceConnection } from "eris";
+import Undici from "undici";
 import * as ytext from "youtube-ext";
 import { Tofu } from "@/core/tofu";
 import { DurationUtils } from "@/utils/duration";
@@ -136,6 +137,7 @@ export class TofuMusicConnection {
     }
 
     async onVoiceConnectionError(err: unknown) {
+        if (err instanceof Undici.errors.RequestAbortedError) return;
         log.error(
             `Voice connection error in guild "${this.guildId}" and voice channel "${this.voiceChannelId}".`,
         );
