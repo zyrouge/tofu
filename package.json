@@ -19,7 +19,7 @@
         "m3u8stream": "^0.8.6",
         "node-html-parser": "^6.1.12",
         "opusscript": "^0.1.1",
-        "undici": "^6.2.1",
+        "undici": "^6.4.0",
         "youtube-ext": "^1.1.16",
         "zod": "^3.22.4"
     },
@@ -34,12 +34,12 @@
     "devDependencies": {
         "@trivago/prettier-plugin-sort-imports": "^4.3.0",
         "@types/fs-extra": "^11.0.4",
-        "@types/node": "^20.10.6",
-        "@typescript-eslint/eslint-plugin": "^6.16.0",
-        "@typescript-eslint/parser": "^6.16.0",
+        "@types/node": "^20.11.5",
+        "@typescript-eslint/eslint-plugin": "^6.19.0",
+        "@typescript-eslint/parser": "^6.19.0",
         "cross-env": "^7.0.3",
         "eslint": "^8.56.0",
-        "prettier": "^3.1.1",
+        "prettier": "^3.2.4",
         "tsx": "^4.7.0",
         "typescript": "^5.3.3"
     }

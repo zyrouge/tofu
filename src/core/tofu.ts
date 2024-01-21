@@ -159,10 +159,7 @@ export class Tofu {
     ];
 
     static async create(mode: string) {
-        const configPath = p.join(paths.configDir, `${mode}.json`);
-        if (!(await pathExists(configPath))) {
-            throw new Error(`Missing mode config at "${configPath}"`);
-        }
+        const configPath = await this.getConfigPath(mode);
         const buffer = await readFile(configPath);
         const config = this.parseConfig(JSON.parse(buffer.toString()));
         if (!config) {
@@ -175,5 +172,18 @@ export class Tofu {
     static parseConfig(config: unknown): TofuConfig | undefined {
         const parsed = TofuConfigSchema.safeParse(config);
         if (parsed.success) return parsed.data;
+    }
+
+    static async getConfigPath(mode: string) {
+        const modeConfigPath = p.join(paths.configDir, `${mode}.json`);
+        if (await pathExists(modeConfigPath)) {
+            return modeConfigPath;
+        }
+        const rootConfigPath = p.join(paths.rootDir, "config.json");
+        if (await pathExists(rootConfigPath)) {
+            log.warn(`Using root config from "${rootConfigPath}"`);
+            return rootConfigPath;
+        }
+        throw new Error(`Missing mode config at "${modeConfigPath}"`);
     }
 }
