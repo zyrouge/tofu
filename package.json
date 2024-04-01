@@ -19,7 +19,7 @@
         "m3u8stream": "^0.8.6",
         "node-html-parser": "^6.1.12",
         "opusscript": "^0.1.1",
-        "undici": "^6.4.0",
+        "undici": "^6.10.2",
         "youtube-ext": "^1.1.16",
         "zod": "^3.22.4"
     },
