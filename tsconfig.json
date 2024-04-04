@@ -23,7 +23,7 @@
             "@/core/*": ["core/*"],
             "@/events/*": ["events/*"],
             "@/commands/*": ["commands/*"],
-            "@/utils/*": ["utils/*"],
-        },
-    },
+            "@/utils/*": ["utils/*"]
+        }
+    }
 }
