@@ -15,12 +15,13 @@
         "cute-log-symbols": "^0.0.2",
         "eris": "^0.17.2",
         "fs-extra": "^11.2.0",
-        "genius-lyrics": "^4.4.6",
+        "genius-lyrics": "^4.4.7",
         "m3u8stream": "^0.8.6",
-        "node-html-parser": "^6.1.12",
+        "miniget": "^4.2.3",
+        "node-html-parser": "^6.1.13",
         "opusscript": "^0.1.1",
-        "undici": "^6.4.0",
-        "youtube-ext": "^1.1.16",
+        "undici": "^6.11.1",
+        "youtube-ext": "^1.1.17",
         "zod": "^3.22.4"
     },
     "repository": {
@@ -34,13 +35,13 @@
     "devDependencies": {
         "@trivago/prettier-plugin-sort-imports": "^4.3.0",
         "@types/fs-extra": "^11.0.4",
-        "@types/node": "^20.11.5",
-        "@typescript-eslint/eslint-plugin": "^6.19.0",
-        "@typescript-eslint/parser": "^6.19.0",
+        "@types/node": "^20.12.4",
+        "@typescript-eslint/eslint-plugin": "^7.5.0",
+        "@typescript-eslint/parser": "^7.5.0",
         "cross-env": "^7.0.3",
-        "eslint": "^8.56.0",
-        "prettier": "^3.2.4",
-        "tsx": "^4.7.0",
-        "typescript": "^5.3.3"
+        "eslint": "^8.57.0",
+        "prettier": "^3.2.5",
+        "tsx": "^4.7.2",
+        "typescript": "^5.4.3"
     }
 }
