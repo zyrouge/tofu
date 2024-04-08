@@ -65,6 +65,7 @@ export class Tofu {
     async start() {
         await this.loadEvents();
         await this.bot.connect();
+        await this.music.initialize();
         await this.loadPingServer();
     }
 

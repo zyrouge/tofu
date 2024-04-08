@@ -1,6 +1,7 @@
 import { VoiceChannel, VoiceConnection } from "eris";
+import miniget from "miniget";
 import Undici from "undici";
-import * as ytext from "youtube-ext";
+import * as youtube from "youtubei.js";
 import { Tofu } from "@/core/tofu";
 import { DurationUtils } from "@/utils/duration";
 import { log } from "@/utils/log";
@@ -20,13 +21,14 @@ export interface TofuSong {
 
 export class TofuMusic {
     connections = new Map<string, TofuMusicConnection>();
+    utils: TofuMusicUtils;
 
     constructor(public readonly tofu: Tofu) {
-        if (tofu.config.youtubeCookie) {
-            ytext.CookieJar.parseCookieString(tofu.config.youtubeCookie, {
-                cookieMap: ytext.cookieJar.cookieMap,
-            });
-        }
+        this.utils = new TofuMusicUtils(this.tofu);
+    }
+
+    async initialize() {
+        this.utils.initialize();
     }
 
     hasConnection(guildId: string) {
@@ -106,13 +108,13 @@ export class TofuMusicConnection {
     async play() {
         const song = this.songs[this.index];
         if (!song) return false;
-        const stream = await TofuMusicUtils.generateSongStream(song);
+        const stream = await this.tofu.music.utils.generateSongWebmStream(song);
         if (!stream) {
             this.onVoiceConnectionEnd();
             return false;
         }
         this.voiceConnection.play(stream, {
-            inlineVolume: true,
+            format: "webm",
         });
         return true;
     }
@@ -238,7 +240,7 @@ export class TofuMusicConnection {
             if (this.isVoiceChannelEmpty()) {
                 this.destroy();
             }
-        }, TofuMusicUtils.SCHEDULED_TIMEOUT_MS);
+        }, this.scheduledTimeoutMs);
     }
 
     removeScheduledLeaveTimeout() {
@@ -263,17 +265,34 @@ export class TofuMusicConnection {
     get playedDuration() {
         return this.voiceConnection.current?.playTime ?? 0;
     }
+
+    get scheduledTimeoutMs() {
+        return 300000;
+    }
 }
 
-export class TofuMusicUtils {
-    static SCHEDULED_TIMEOUT_MS = 300000 as const;
+export type TofuYoutubeSupportedVideo = youtube.YTNodes.Video;
+export type TofuYoutubeSearchVideo = TofuYoutubeSupportedVideo;
+export type TofuYoutubeVideo = youtube.YT.VideoInfo;
+export type TofuYoutubePlaylist = youtube.YT.Playlist & {
+    supportedVideos: TofuYoutubeSupportedVideo[];
+};
 
-    static async search(terms: string) {
+export class TofuMusicUtils {
+    innertube!: youtube.Innertube;
+
+    constructor(public readonly tofu: Tofu) {}
+
+    async initialize() {
+        this.innertube = await youtube.Innertube.create();
+    }
+
+    async search(terms: string): Promise<TofuYoutubeSearchVideo[]> {
         try {
-            const { videos } = await ytext.search(terms, {
-                filterType: "video",
+            const { videos } = await this.innertube.search(terms, {
+                type: "video",
             });
-            return videos;
+            return TofuYoutubeUtils.filterSupportedVideos(videos);
         } catch (err) {
             log.error(
                 `Unable to generate YouTube search results for "${terms}".`,
@@ -283,9 +302,10 @@ export class TofuMusicUtils {
         }
     }
 
-    static async getVideo(url: string) {
+    async getVideo(url: string): Promise<TofuYoutubeVideo | undefined> {
         try {
-            const video = await ytext.videoInfo(url);
+            const id = TofuYoutubeUtils.parseVideoId(url)!;
+            const video = await this.innertube.getBasicInfo(id);
             return video;
         } catch (err) {
             log.error(
@@ -295,10 +315,15 @@ export class TofuMusicUtils {
         }
     }
 
-    static async getPlaylist(url: string) {
+    async getPlaylist(url: string): Promise<TofuYoutubePlaylist | undefined> {
         try {
-            const playlist = await ytext.playlistInfo(url);
-            return playlist;
+            const id = TofuYoutubeUtils.parsePlaylistId(url)!;
+            const playlist = await this.innertube.getPlaylist(id);
+            // @ts-expect-error we know
+            playlist.supportedVideos = TofuYoutubeUtils.filterSupportedVideos(
+                playlist.videos,
+            );
+            return playlist as TofuYoutubePlaylist;
         } catch (err) {
             log.error(
                 `Unable to fetch YouTube playlist information for "${url}".`,
@@ -307,18 +332,20 @@ export class TofuMusicUtils {
         }
     }
 
-    static async generateSongStream(song: TofuSong) {
+    async generateSongWebmStream(song: TofuSong) {
         try {
-            const streamInfo = await ytext.extractStreamInfo(song.metadata.url);
-            const formats = await ytext.getFormats(streamInfo);
-            const isLive = ytext.utils.isLiveContentURL(
-                streamInfo.hlsManifestUrl,
-            );
-            const format = isLive
-                ? this.findBestLiveStream(formats)
-                : this.findBestAudioStream(formats);
-            if (!format) return;
-            const stream = await ytext.getReadableStream(format);
+            const id = TofuYoutubeUtils.parseVideoId(song.metadata.url)!;
+            const info = await this.innertube.getBasicInfo(id);
+            const formats = [
+                ...(info.streaming_data?.formats || []),
+                ...(info.streaming_data?.adaptive_formats || []),
+            ];
+            const url = formats
+                .find((x) => [249, 250, 251].includes(x.itag))!
+                .decipher(this.innertube.session.player);
+            const stream = miniget(url, {
+                headers: youtube.Constants.STREAM_HEADERS,
+            });
             return stream;
         } catch (err) {
             log.error(
@@ -327,72 +354,84 @@ export class TofuMusicUtils {
             log.logError(err);
         }
     }
+}
 
-    static findBestAudioStream(formats: ytext.VideoFormat[]) {
-        for (let i = formats.length - 1; i > -1; i--) {
-            const x = formats[i]!;
-            if (!x.__decoded) continue;
-            if (!(x.mimeType?.startsWith("audio/") ?? false)) continue;
-            return x;
-        }
+export class TofuYoutubeUtils {
+    static baseURL = "https://www.youtube.com";
+    static watchURLRegex = /\/watch\?v=([a-zA-Z0-9-_]{11})/;
+    static playlistURLRegex = /\/playlist\?list=([A-Za-z0-9_]+)/;
+
+    static isWatchURL(url?: string) {
+        return !!url?.match(TofuYoutubeUtils.watchURLRegex);
     }
 
-    static findBestLiveStream(formats: ytext.VideoFormat[]) {
-        for (let i = formats.length - 1; i > -1; i--) {
-            const x = formats[i]!;
-            if (!x.__decoded) continue;
-            if (
-                ytext.utils.isLiveContentURL(x.url) &&
-                ytext.utils.isHlsContentURL(x.url)
-            ) {
-                return x;
-            }
-        }
+    static parseVideoId(url?: string) {
+        return url?.match(TofuYoutubeUtils.watchURLRegex)?.[1];
     }
 
-    static convertSearchVideoToSongMetadata(video: ytext.SearchVideo) {
+    static constructVideoURL(id: string) {
+        return `${TofuYoutubeUtils.baseURL}/watch?v=${id}`;
+    }
+
+    static isPlaylistURL(url?: string) {
+        return !!url?.match(TofuYoutubeUtils.playlistURLRegex);
+    }
+
+    static parsePlaylistId(url?: string) {
+        return url?.match(TofuYoutubeUtils.playlistURLRegex)?.[1];
+    }
+
+    static convertSearchVideoToSongMetadata(video: TofuYoutubeSearchVideo) {
+        return this.convertSupportedVideoToSongMetadata(video);
+    }
+
+    static convertPlaylistVideoToSongMetadata(
+        video: TofuYoutubeSupportedVideo,
+    ) {
+        return this.convertSupportedVideoToSongMetadata(video);
+    }
+
+    static convertSupportedVideoToSongMetadata(
+        video: TofuYoutubeSupportedVideo,
+    ) {
         const metadata: TofuSongMetadata = {
-            title: video.title,
-            channel: video.channel.name,
-            url: video.url,
-            thumbnail: video.thumbnails[0]?.url,
-            duration: video.duration.pretty,
-        };
-        return metadata;
-    }
-
-    static convertPlaylistVideoToSongMetadata(video: ytext.PlaylistVideo) {
-        const metadata: TofuSongMetadata = {
-            title: video.title,
-            channel: video.channel.name,
-            url: video.url,
-            thumbnail: video.thumbnails[0]?.url,
-            duration: video.duration.pretty,
-        };
-        return metadata;
-    }
-
-    static convertVideoInfoToSongMetadata(video: ytext.VideoInfo) {
-        const metadata: TofuSongMetadata = {
-            title: video.title,
-            channel: video.channel.name,
-            url: video.url,
-            thumbnail: video.thumbnails?.reduce((pv, cv) => {
-                if (!pv || cv.height > pv.height) {
-                    return cv;
-                }
-                return pv;
-            }, video.thumbnails[0])?.url,
+            title: video.title.text ?? "?",
+            channel: video.author.name,
+            url: TofuYoutubeUtils.constructVideoURL(video.id),
+            thumbnail: video.best_thumbnail?.url,
             duration: DurationUtils.prettySeconds(
-                parseInt(video.duration.lengthSec),
+                video.duration.seconds,
                 "short",
             ),
         };
         return metadata;
     }
 
-    static shortenVideoURL(url: string) {
-        const id = ytext.utils.getYoutubeVideoId(url)!;
-        return ytext.utils.constants.urls.video.base(id);
+    static convertVideoInfoToSongMetadata(video: TofuYoutubeVideo) {
+        const metadata: TofuSongMetadata = {
+            title: video.basic_info.title ?? "?",
+            channel: video.basic_info.author ?? "?",
+            url: TofuYoutubeUtils.constructVideoURL(video.basic_info.id!),
+            thumbnail: video.basic_info.thumbnail?.reduce((pv, cv) => {
+                if (!pv || cv.height > pv.height) {
+                    return cv;
+                }
+                return pv;
+            }, video.basic_info.thumbnail[0])?.url,
+            duration: DurationUtils.prettySeconds(
+                video.basic_info.duration ?? 0,
+                "short",
+            ),
+        };
+        return metadata;
+    }
+
+    static filterSupportedVideos(
+        videos: youtube.Helpers.YTNode[],
+    ): TofuYoutubeSupportedVideo[] {
+        return videos.filter(
+            (x): x is TofuYoutubeSupportedVideo =>
+                x instanceof youtube.YTNodes.Video,
+        );
     }
 }

@@ -1,7 +1,6 @@
 import { Constants, VoiceChannel } from "eris";
-import * as ytext from "youtube-ext";
 import { TofuCommand } from "@/core/command";
-import { TofuMusicUtils, TofuSong } from "@/core/modules/music";
+import { TofuYoutubeUtils, TofuSong } from "@/core/modules/music";
 import { emojis } from "@/utils/emojis";
 import { ErisUtils } from "@/utils/eris";
 import { StringUtils } from "@/utils/string";
@@ -20,7 +19,7 @@ export const playCommand: TofuCommand = {
             },
         ],
     },
-    autocomplete: async (_, interaction) => {
+    autocomplete: async (tofu, interaction) => {
         const voiceChannelId = interaction.member?.voiceState?.channelID;
         if (!voiceChannelId) return;
         const terms = ErisUtils.getAutocompleteInteractionStringOptionValue(
@@ -28,10 +27,10 @@ export const playCommand: TofuCommand = {
             "terms",
         );
         if (!terms || terms.length < 3) return;
-        const videos = await TofuMusicUtils.search(terms);
+        const videos = await tofu.music.utils.search(terms);
         return videos.slice(0, 5).map((x) => ({
-            name: StringUtils.overflow(`${x.title} (By ${x.channel.name})`),
-            value: TofuMusicUtils.shortenVideoURL(x.url),
+            name: StringUtils.overflow(`${x.title} (By ${x.author.name})`),
+            value: TofuYoutubeUtils.constructVideoURL(x.id),
         }));
     },
     invoke: async (tofu, interaction) => {
@@ -59,39 +58,41 @@ export const playCommand: TofuCommand = {
         let title = "";
         let url = "";
         const songs: TofuSong[] = [];
-        if (ytext.utils.isYoutubeWatchURL(terms)) {
-            const video = await TofuMusicUtils.getVideo(terms);
+        if (TofuYoutubeUtils.isWatchURL(terms)) {
+            const video = await tofu.music.utils.getVideo(terms);
             if (video) {
-                title = video.title;
-                url = video.url;
+                const metadata =
+                    TofuYoutubeUtils.convertVideoInfoToSongMetadata(video);
+                title = metadata.title;
+                url = metadata.url;
                 songs.push({
-                    metadata:
-                        TofuMusicUtils.convertVideoInfoToSongMetadata(video),
+                    metadata,
                     addedBy: memberId,
                 });
             }
-        } else if (ytext.utils.isYoutubePlaylistURL(terms)) {
-            const playlist = await TofuMusicUtils.getPlaylist(terms);
+        } else if (TofuYoutubeUtils.isPlaylistURL(terms)) {
+            const playlist = await tofu.music.utils.getPlaylist(terms);
             if (playlist) {
-                title = playlist.title;
-                url = playlist.url;
-                const mapped = playlist.videos.map((x) => ({
+                title = playlist.info.title ?? "?";
+                url = terms;
+                const mapped = playlist.supportedVideos.map((x) => ({
                     metadata:
-                        TofuMusicUtils.convertPlaylistVideoToSongMetadata(x),
+                        TofuYoutubeUtils.convertPlaylistVideoToSongMetadata(x),
                     addedBy: memberId,
                 }));
                 songs.push(...mapped);
             }
         } else {
-            const [searchVideo] = await TofuMusicUtils.search(terms);
+            const [searchVideo] = await tofu.music.utils.search(terms);
             if (searchVideo) {
-                title = searchVideo.title;
-                url = searchVideo.url;
+                const metadata =
+                    TofuYoutubeUtils.convertSearchVideoToSongMetadata(
+                        searchVideo,
+                    );
+                title = metadata.title;
+                url = metadata.url;
                 songs.push({
-                    metadata:
-                        TofuMusicUtils.convertSearchVideoToSongMetadata(
-                            searchVideo,
-                        ),
+                    metadata,
                     addedBy: memberId,
                 });
             }

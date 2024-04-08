@@ -16,12 +16,11 @@
         "eris": "^0.17.2",
         "fs-extra": "^11.2.0",
         "genius-lyrics": "^4.4.7",
-        "m3u8stream": "^0.8.6",
         "miniget": "^4.2.3",
         "node-html-parser": "^6.1.13",
         "opusscript": "^0.1.1",
         "undici": "^6.12.0",
-        "youtube-ext": "^1.1.19",
+        "youtubei.js": "^9.2.1",
         "zod": "^3.22.4"
     },
     "repository": {
@@ -29,13 +28,10 @@
     },
     "license": "MIT",
     "keywords": [],
-    "volta": {
-        "node": "18.17.1"
-    },
     "devDependencies": {
         "@trivago/prettier-plugin-sort-imports": "^4.3.0",
         "@types/fs-extra": "^11.0.4",
-        "@types/node": "^20.12.5",
+        "@types/node": "^20.12.7",
         "@typescript-eslint/eslint-plugin": "^7.5.0",
         "@typescript-eslint/parser": "^7.5.0",
         "cross-env": "^7.0.3",
