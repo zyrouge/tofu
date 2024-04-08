@@ -82,6 +82,10 @@
                 }
             },
             "required": ["mode", "ids"]
+        },
+        "youtubeCookie": {
+            "title": "YouTube Cookie",
+            "type": "string"
         }
     },
     "required": ["discordToken", "priviledgedUsers"]

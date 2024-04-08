@@ -41,6 +41,7 @@ export const TofuConfigSchema = z.object({
             ids: z.string().array(),
         })
         .optional(),
+    youtubeCookie: z.string().optional(),
 });
 
 export type TofuConfig = z.infer<typeof TofuConfigSchema>;

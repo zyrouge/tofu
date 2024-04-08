@@ -21,7 +21,13 @@ export interface TofuSong {
 export class TofuMusic {
     connections = new Map<string, TofuMusicConnection>();
 
-    constructor(public readonly tofu: Tofu) {}
+    constructor(public readonly tofu: Tofu) {
+        if (tofu.config.youtubeCookie) {
+            ytext.CookieJar.parseCookieString(tofu.config.youtubeCookie, {
+                cookieMap: ytext.cookieJar.cookieMap,
+            });
+        }
+    }
 
     hasConnection(guildId: string) {
         return this.connections.has(guildId);
