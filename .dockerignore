@@ -3,3 +3,5 @@
 data
 media
 node_modules
+config
+config.json
