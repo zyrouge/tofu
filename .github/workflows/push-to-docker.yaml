@@ -28,3 +28,4 @@ jobs:
               with:
                   push: true
                   tags: zyrouge/tofu:latest
+                  file: Containerfile
