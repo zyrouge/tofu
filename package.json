@@ -20,7 +20,7 @@
         "node-html-parser": "^6.1.13",
         "opusscript": "^0.1.1",
         "undici": "^6.13.0",
-        "youtubei.js": "^9.3.0",
+        "youtubei.js": "^9.4.0",
         "zod": "^3.22.4"
     },
     "repository": {
