@@ -21,7 +21,7 @@
         "opusscript": "^0.1.1",
         "undici": "^6.13.0",
         "youtubei.js": "^9.3.0",
-        "zod": "^3.22.4"
+        "zod": "^3.23.6"
     },
     "repository": {
         "url": "https://github.com/zyrouge/tofu"
