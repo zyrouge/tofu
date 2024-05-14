@@ -1,4 +1,4 @@
-name: Push to Docker
+name: Push to Github Packages
 
 on:
     push:
