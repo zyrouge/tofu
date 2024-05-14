@@ -36,6 +36,7 @@ jobs:
             - uses: docker/metadata-action@v5
               id: meta
               with:
+                  flavor: latest=true
                   images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
 
             - name: 🚀 Build & push
