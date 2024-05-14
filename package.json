@@ -19,9 +19,9 @@
         "miniget": "^4.2.3",
         "node-html-parser": "^6.1.13",
         "opusscript": "^0.1.1",
-        "undici": "^6.13.0",
-        "youtubei.js": "^9.3.0",
-        "zod": "^3.22.4"
+        "undici": "^6.16.1",
+        "youtubei.js": "^9.4.0",
+        "zod": "^3.23.8"
     },
     "repository": {
         "url": "https://github.com/zyrouge/tofu"
@@ -31,13 +31,13 @@
     "devDependencies": {
         "@trivago/prettier-plugin-sort-imports": "^4.3.0",
         "@types/fs-extra": "^11.0.4",
-        "@types/node": "^20.12.7",
-        "@typescript-eslint/eslint-plugin": "^7.7.0",
-        "@typescript-eslint/parser": "^7.7.0",
+        "@types/node": "^20.12.12",
+        "@typescript-eslint/eslint-plugin": "^7.9.0",
+        "@typescript-eslint/parser": "^7.9.0",
         "cross-env": "^7.0.3",
         "eslint": "^8.57.0",
         "prettier": "^3.2.5",
-        "tsx": "^4.7.2",
+        "tsx": "^4.10.2",
         "typescript": "^5.4.5"
     }
 }
