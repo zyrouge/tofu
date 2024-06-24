@@ -19,7 +19,7 @@
         "miniget": "^4.2.3",
         "node-html-parser": "^6.1.13",
         "opusscript": "^0.1.1",
-        "undici": "^6.16.1",
+        "undici": "^6.19.2",
         "youtubei.js": "^9.4.0",
         "zod": "^3.23.8"
     },
