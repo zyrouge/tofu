@@ -11,7 +11,9 @@ export const interactionCreateEvent: TofuEvent<"interactionCreate"> = {
         type: "on",
     },
     action: async (tofu, interaction) => {
-        if (!tofu.botReady) return;
+        if (!tofu.botReady) {
+            return;
+        }
         if (interaction instanceof CommandInteraction) {
             await onCommandInteration(tofu, interaction);
         } else if (interaction instanceof AutocompleteInteraction) {
@@ -33,9 +35,13 @@ const onCommandInteration = async (
     try {
         await interaction.defer();
         const action = tofu.commandInvokes.get(interaction.data.name);
-        if (!action) return;
+        if (!action) {
+            return;
+        }
         const result = await action(tofu, interaction);
-        if (!result) return;
+        if (!result) {
+            return;
+        }
         if (typeof result === "string") {
             await interaction.createMessage(result);
             return;
@@ -59,12 +65,18 @@ const onAutocompleteInteration = async (
     tofu: Tofu,
     interaction: AutocompleteInteraction,
 ) => {
-    if (!ErisUtils.isInteractionAllowed(tofu, interaction)) return;
+    if (!ErisUtils.isInteractionAllowed(tofu, interaction)) {
+        return;
+    }
     try {
         const action = tofu.commandAutocompletes.get(interaction.data.name);
-        if (!action) return;
+        if (!action) {
+            return;
+        }
         const result = await action(tofu, interaction);
-        if (!result) return;
+        if (!result) {
+            return;
+        }
         await interaction.result(result);
     } catch (err) {
         if (!isProduction()) {

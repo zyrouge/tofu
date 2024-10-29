@@ -44,7 +44,9 @@ export class DurationUtils {
 
     static parseShortFormatted(value: string) {
         const match = this.testShortFormattedRegex.test(value);
-        if (!match) return;
+        if (!match) {
+            return;
+        }
         const splitted = value.split(":");
         const seconds = parseInt(splitted.pop()!);
         const minutes = parseInt(splitted.pop() ?? "0");

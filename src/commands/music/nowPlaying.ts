@@ -67,16 +67,19 @@ const createProgressBar = (current?: number, total?: number) => {
 };
 
 const parseDuration = (value?: string) => {
-    if (!value) return;
+    if (!value) {
+        return;
+    }
     const parsed = DurationUtils.parseShortFormatted(value);
-    if (!parsed) return;
+    if (!parsed) {
+        return;
+    }
     return DurationUtils.durationToSeconds(parsed);
 };
 
 const prettyDuration = (value?: number) => {
-    const pretty =
-        typeof value === "number"
-            ? DurationUtils.prettySeconds(value, "short")
-            : "-";
-    return `\`${pretty}\``;
+    if (typeof value !== "number") {
+        return `\`-\``;
+    }
+    return `\`${DurationUtils.prettySeconds(value, "short")}\``;
 };

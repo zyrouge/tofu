@@ -1,4 +1,4 @@
-import { ApplicationCommandStructure, CommandClient, Constants } from "eris";
+import { CommandClient, Constants } from "eris";
 import { pathExists, readFile } from "fs-extra";
 import p from "path";
 import { evalCommand } from "@/commands/developer/eval";
@@ -37,6 +37,7 @@ import { voiceChannelJoinEvent } from "@/events/voiceChannelJoin";
 import { voiceChannelLeaveEvent } from "@/events/voiceChannelLeave";
 import { voiceChannelSwitchEvent } from "@/events/voiceChannelSwitch";
 import { isProduction } from "@/utils/env";
+import { ErisChatInputApplicationCommandOptions } from "@/utils/eris";
 import { log } from "@/utils/log";
 import { paths } from "@/utils/paths";
 import { PingServer, startPingServer } from "@/utils/pingServer";
@@ -65,12 +66,11 @@ export class Tofu {
     async start() {
         await this.loadEvents();
         await this.bot.connect();
-        await this.music.initialize();
         await this.loadPingServer();
     }
 
     async loadCommands() {
-        const slashCommands: ApplicationCommandStructure[] = [];
+        const slashCommands: ErisChatInputApplicationCommandOptions[] = [];
         for (const x of Tofu.commands) {
             const commandName = x.config.name;
             slashCommands.push({
@@ -172,7 +172,9 @@ export class Tofu {
 
     static parseConfig(config: unknown): TofuConfig | undefined {
         const parsed = TofuConfigSchema.safeParse(config);
-        if (parsed.success) return parsed.data;
+        if (parsed.success) {
+            return parsed.data;
+        }
     }
 
     static async getConfigPath(mode: string) {

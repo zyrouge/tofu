@@ -1,4 +1,5 @@
 import {
+    ApplicationCommandCreateOptions,
     AutocompleteInteraction,
     CommandInteraction,
     Constants,
@@ -9,13 +10,23 @@ import {
 import { Tofu } from "@/core/tofu";
 import { emojis } from "@/utils/emojis";
 
+export type ErisChatInputApplicationCommandOptions = Omit<
+    ApplicationCommandCreateOptions<
+        false,
+        typeof Constants.ApplicationCommandTypes.CHAT_INPUT
+    >,
+    "defaultPermission"
+>;
+
 export class ErisUtils {
     static isInteractionAllowed(
         tofu: Tofu,
         interaction: CommandInteraction | AutocompleteInteraction,
     ) {
         const { guildID } = interaction;
-        if (!guildID) return;
+        if (!guildID) {
+            return;
+        }
         return tofu.filteredGuilds.isWhitelisted(guildID);
     }
 

@@ -1,5 +1,4 @@
 import {
-    ChatInputApplicationCommandStructure,
     CommandInteraction,
     InteractionContent,
     FileContent,
@@ -7,6 +6,7 @@ import {
     ApplicationCommandOptionChoice,
 } from "eris";
 import { Tofu } from "@/core/tofu";
+import { ErisChatInputApplicationCommandOptions } from "@/utils/eris";
 
 export interface TofuCommandReply {
     message: string | InteractionContent;
@@ -24,7 +24,7 @@ export type TofuCommandInvoke = (
 ) => Promise<TofuCommandReply | undefined>;
 
 export interface TofuCommand {
-    config: Omit<ChatInputApplicationCommandStructure, "type">;
+    config: Omit<ErisChatInputApplicationCommandOptions, "type">;
     autocomplete?: TofuCommandAutocomplete;
     invoke: TofuCommandInvoke;
 }

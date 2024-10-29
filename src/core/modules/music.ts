@@ -1,5 +1,5 @@
 import { VoiceChannel, VoiceConnection } from "eris";
-import miniget from "miniget";
+import { Readable } from "stream";
 import Undici from "undici";
 import * as youtube from "youtubei.js";
 import { Tofu } from "@/core/tofu";
@@ -25,10 +25,6 @@ export class TofuMusic {
 
     constructor(public readonly tofu: Tofu) {
         this.utils = new TofuMusicUtils(this.tofu);
-    }
-
-    async initialize() {
-        this.utils.initialize();
     }
 
     hasConnection(guildId: string) {
@@ -62,8 +58,7 @@ export class TofuMusic {
 
     async createOrGetConnection(guildId: string, voiceChannelId: string) {
         const connection = this.connections.get(guildId);
-        if (connection) return connection;
-        return this.createConnection(guildId, voiceChannelId);
+        return connection ?? this.createConnection(guildId, voiceChannelId);
     }
 }
 
@@ -107,7 +102,9 @@ export class TofuMusicConnection {
 
     async play() {
         const song = this.songs[this.index];
-        if (!song) return false;
+        if (!song) {
+            return false;
+        }
         const stream = await this.tofu.music.utils.generateSongWebmStream(song);
         if (!stream) {
             this.onVoiceConnectionEnd();
@@ -140,12 +137,16 @@ export class TofuMusicConnection {
             delete this.preventEndPlay;
             return;
         }
-        if (this.index === -1) return;
+        if (this.index === -1) {
+            return;
+        }
         await this.play();
     }
 
     async onVoiceConnectionError(err: unknown) {
-        if (err instanceof Undici.errors.RequestAbortedError) return;
+        if (err instanceof Undici.errors.RequestAbortedError) {
+            return;
+        }
         log.error(
             `Voice connection error in guild "${this.guildId}" and voice channel "${this.voiceChannelId}".`,
         );
@@ -153,7 +154,9 @@ export class TofuMusicConnection {
     }
 
     async pause() {
-        if (!this.playing || this.paused) return false;
+        if (!this.playing || this.paused) {
+            return false;
+        }
         this.voiceConnection.pause();
         return true;
     }
@@ -166,7 +169,9 @@ export class TofuMusicConnection {
             this.index = 0;
             return this.play();
         }
-        if (!this.paused) return false;
+        if (!this.paused) {
+            return false;
+        }
         this.voiceConnection.resume();
         return true;
     }
@@ -177,7 +182,9 @@ export class TofuMusicConnection {
 
     async jump(index: number) {
         this.stopCurrentSong();
-        if (!this.hasSongAt(index)) return false;
+        if (!this.hasSongAt(index)) {
+            return false;
+        }
         this.index = index;
         return this.play();
     }
@@ -234,7 +241,9 @@ export class TofuMusicConnection {
     }
 
     scheduleLeave() {
-        if (this.scheduledLeaveTimeout) return;
+        if (this.scheduledLeaveTimeout) {
+            return;
+        }
         this.scheduledLeaveTimeout = setTimeout(() => {
             this.removeScheduledLeaveTimeout();
             if (this.isVoiceChannelEmpty()) {
@@ -245,7 +254,9 @@ export class TofuMusicConnection {
 
     removeScheduledLeaveTimeout() {
         const timeout = this.scheduledLeaveTimeout;
-        if (!timeout) return;
+        if (!timeout) {
+            return;
+        }
         delete this.scheduledLeaveTimeout;
         clearTimeout(timeout);
     }
@@ -279,17 +290,12 @@ export type TofuYoutubePlaylist = youtube.YT.Playlist & {
 };
 
 export class TofuMusicUtils {
-    innertube!: youtube.Innertube;
-
     constructor(public readonly tofu: Tofu) {}
-
-    async initialize() {
-        this.innertube = await youtube.Innertube.create();
-    }
 
     async search(terms: string): Promise<TofuYoutubeSearchVideo[]> {
         try {
-            const { videos } = await this.innertube.search(terms, {
+            const client = await this.getClient();
+            const { videos } = await client.search(terms, {
                 type: "video",
             });
             return TofuYoutubeUtils.filterSupportedVideos(videos);
@@ -305,7 +311,8 @@ export class TofuMusicUtils {
     async getVideo(url: string): Promise<TofuYoutubeVideo | undefined> {
         try {
             const id = TofuYoutubeUtils.parseVideoId(url)!;
-            const video = await this.innertube.getBasicInfo(id);
+            const client = await this.getClient();
+            const video = await client.getBasicInfo(id);
             return video;
         } catch (err) {
             log.error(
@@ -318,8 +325,9 @@ export class TofuMusicUtils {
     async getPlaylist(url: string): Promise<TofuYoutubePlaylist | undefined> {
         try {
             const id = TofuYoutubeUtils.parsePlaylistId(url)!;
-            const playlist = await this.innertube.getPlaylist(id);
-            // @ts-expect-error we know
+            const client = await this.getClient();
+            const playlist = await client.getPlaylist(id);
+            // @ts-expect-error
             playlist.supportedVideos = TofuYoutubeUtils.filterSupportedVideos(
                 playlist.videos,
             );
@@ -335,24 +343,26 @@ export class TofuMusicUtils {
     async generateSongWebmStream(song: TofuSong) {
         try {
             const id = TofuYoutubeUtils.parseVideoId(song.metadata.url)!;
-            const info = await this.innertube.getBasicInfo(id);
-            const formats = [
-                ...(info.streaming_data?.formats || []),
-                ...(info.streaming_data?.adaptive_formats || []),
-            ];
-            const url = formats
-                .find((x) => [249, 250, 251].includes(x.itag))!
-                .decipher(this.innertube.session.player);
-            const stream = miniget(url, {
-                headers: youtube.Constants.STREAM_HEADERS,
+            const client = await this.getClient({
+                client_type: youtube.ClientType.IOS,
             });
-            return stream;
+            const stream = await client.download(id, {
+                type: "audio",
+                quality: "best",
+                client: "IOS",
+            });
+            // @ts-expect-error
+            return Readable.fromWeb(stream);
         } catch (err) {
             log.error(
                 `Unable to generate YouTube song stream for "${song.metadata.url}".`,
             );
             log.logError(err);
         }
+    }
+
+    async getClient(config?: youtube.Types.InnerTubeConfig) {
+        return youtube.Innertube.create(config);
     }
 }
 

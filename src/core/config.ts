@@ -1,4 +1,4 @@
-import { BotActivityType, Constants } from "eris";
+import { ActivityType, Constants } from "eris";
 import { z } from "zod";
 
 export const TofuConfigSchema = z.object({
@@ -25,10 +25,12 @@ export const TofuConfigSchema = z.object({
                         ])
                         .optional()
                         .transform((value) => {
-                            if (typeof value === "undefined") return;
+                            if (typeof value === "undefined") {
+                                return;
+                            }
                             return Constants.ActivityTypes[
-                                value.toUpperCase() as keyof Constants["ActivityTypes"]
-                            ] as BotActivityType;
+                                value.toUpperCase() as keyof typeof Constants.ActivityTypes
+                            ] as ActivityType;
                         }),
                     text: z.string().optional(),
                 })

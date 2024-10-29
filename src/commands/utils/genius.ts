@@ -28,7 +28,9 @@ export const geniusCommand: TofuCommand = {
             interaction,
             "terms",
         );
-        if (!terms || terms.length < 3) return;
+        if (!terms || terms.length < 3) {
+            return;
+        }
         const songs = await genius.songs.search(terms);
         const filtered: GeniusLyrics.Song[] = [];
         for (const x of songs) {

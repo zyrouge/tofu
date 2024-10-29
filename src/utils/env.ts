@@ -7,7 +7,9 @@ export const ensureEnvPath = () => {
     try {
         // eslint-disable-next-line @typescript-eslint/no-var-requires
         const ffmpeg = require("ffmpeg-static") as string | null;
-        if (typeof ffmpeg !== "string") return;
+        if (typeof ffmpeg !== "string") {
+            return;
+        }
         const ffmpegDir = p.dirname(ffmpeg);
         process.env.PATH = `${process.env.PATH}:${ffmpegDir}`;
         // eslint-disable-next-line no-empty

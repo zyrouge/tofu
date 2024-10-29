@@ -47,7 +47,9 @@ export const anilistCommand: TofuCommand = {
         const focused = interaction.data.options.find(
             (x) => "focused" in x && x.focused,
         );
-        if (!focused) return [];
+        if (!focused) {
+            return [];
+        }
         if (focused?.name === "type") {
             return mediaTypeValuesAutocomplete;
         }
@@ -55,12 +57,16 @@ export const anilistCommand: TofuCommand = {
             interaction,
             "type",
         )?.toUpperCase();
-        if (!type) return [];
+        if (!type) {
+            return [];
+        }
         const terms = ErisUtils.getAutocompleteInteractionStringOptionValue(
             interaction,
             "terms",
         );
-        if (!terms || terms.length < 3) return;
+        if (!terms || terms.length < 3) {
+            return;
+        }
         const isAdult =
             ErisUtils.getAutocompleteInteractionBooleanOptionValue(
                 interaction,

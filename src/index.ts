@@ -11,3 +11,8 @@ const start = async () => {
 };
 
 start();
+
+process.on("uncaughtException", (err) => {
+    log.error("Uncaught exception during runtime");
+    log.logError(err);
+});

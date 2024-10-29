@@ -6,8 +6,9 @@ export const voiceChannelJoinEvent: TofuEvent<"voiceChannelJoin"> = {
         type: "on",
     },
     action: async (tofu, member, newChannel) => {
-        if (tofu.filteredGuilds.isBlacklisted(member.guild.id)) return;
-        if (member.bot) return;
+        if (member.bot || tofu.filteredGuilds.isBlacklisted(member.guild.id)) {
+            return;
+        }
         const connection = tofu.music.getConnection(newChannel.guild.id);
         if (connection && connection.voiceChannelId === newChannel.id) {
             connection.removeScheduledLeaveTimeout();

@@ -21,12 +21,16 @@ export const playCommand: TofuCommand = {
     },
     autocomplete: async (tofu, interaction) => {
         const voiceChannelId = interaction.member?.voiceState?.channelID;
-        if (!voiceChannelId) return;
+        if (!voiceChannelId) {
+            return;
+        }
         const terms = ErisUtils.getAutocompleteInteractionStringOptionValue(
             interaction,
             "terms",
         );
-        if (!terms || terms.length < 3) return;
+        if (!terms || terms.length < 3) {
+            return;
+        }
         const videos = await tofu.music.utils.search(terms);
         return videos.slice(0, 5).map((x) => ({
             name: StringUtils.overflow(`${x.title} (By ${x.author.name})`),

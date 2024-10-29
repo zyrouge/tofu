@@ -8,8 +8,7 @@ export class Anilist {
 
     static parseIdFromSiteUrl(siteUrl: string) {
         const id = siteUrl.match(this.siteUrlIdRegex)?.[1];
-        if (!id) return;
-        return parseInt(id);
+        return typeof id === "string" ? parseInt(id) : undefined;
     }
 
     static async query<Variables extends object, Result extends object>(

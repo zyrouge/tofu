@@ -10,7 +10,9 @@ export class TofuFilteredGuilds {
 
     loadCache() {
         const { filteredGuilds } = this.tofu.config;
-        if (!filteredGuilds) return;
+        if (!filteredGuilds) {
+            return;
+        }
         this.whitelistedByDefault = filteredGuilds.mode === "blacklisted";
         filteredGuilds.ids.forEach((x) => {
             this.whitelisted.set(x, true);

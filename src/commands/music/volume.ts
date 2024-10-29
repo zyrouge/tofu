@@ -54,7 +54,11 @@ export const volumeCommand: TofuCommand = {
 };
 
 const volumeToEmoji = (value: number) => {
-    if (value === 0) return emojis.speakerMute;
-    if (value <= 50) return emojis.speakerLow;
+    if (value === 0) {
+        return emojis.speakerMute;
+    }
+    if (value <= 50) {
+        return emojis.speakerLow;
+    }
     return emojis.speakerHigh;
 };
