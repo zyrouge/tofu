@@ -327,7 +327,7 @@ export class TofuMusicUtils {
             const id = TofuYoutubeUtils.parsePlaylistId(url)!;
             const client = await this.getClient();
             const playlist = await client.getPlaylist(id);
-            // @ts-expect-error
+            // @ts-expect-error turns into usable playlist
             playlist.supportedVideos = TofuYoutubeUtils.filterSupportedVideos(
                 playlist.videos,
             );
@@ -350,7 +350,7 @@ export class TofuMusicUtils {
                 format: "webm",
                 client: "YTMUSIC",
             });
-            // @ts-expect-error
+            // @ts-expect-error `stream` is compatible
             return Readable.fromWeb(stream);
         } catch (err) {
             log.error(

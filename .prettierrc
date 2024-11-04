@@ -2,5 +2,6 @@
     "tabWidth": 4,
     "useTabs": false,
     "plugins": ["@trivago/prettier-plugin-sort-imports"],
-    "importOrder": ["<THIRD_PARTY_MODULES>", "^@/\\w+/(.*)$", "^[./]"]
+    "importOrder": ["<THIRD_PARTY_MODULES>", "^@/\\w+/(.*)$", "^[./]"],
+    "endOfLine": "auto"
 }
