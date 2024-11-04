@@ -343,13 +343,12 @@ export class TofuMusicUtils {
     async generateSongWebmStream(song: TofuSong) {
         try {
             const id = TofuYoutubeUtils.parseVideoId(song.metadata.url)!;
-            const client = await this.getClient({
-                client_type: youtube.ClientType.IOS,
-            });
+            const client = await this.getClient({});
             const stream = await client.download(id, {
-                type: "audio",
                 quality: "best",
-                client: "IOS",
+                type: "audio",
+                format: "webm",
+                client: "YTMUSIC",
             });
             // @ts-expect-error
             return Readable.fromWeb(stream);

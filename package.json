@@ -16,7 +16,6 @@
         "eris": "^0.18.0",
         "fs-extra": "^11.2.0",
         "genius-lyrics": "^4.4.7",
-        "miniget": "^4.2.3",
         "node-html-parser": "^6.1.13",
         "opusscript": "^0.1.1",
         "undici": "^6.20.1",
@@ -31,11 +30,11 @@
     "devDependencies": {
         "@trivago/prettier-plugin-sort-imports": "^4.3.0",
         "@types/fs-extra": "^11.0.4",
-        "@types/node": "^22.8.2",
+        "@types/node": "^22.8.7",
         "@typescript-eslint/eslint-plugin": "^8.12.2",
         "@typescript-eslint/parser": "^8.12.2",
         "cross-env": "^7.0.3",
-        "eslint": "^9.13.0",
+        "eslint": "^9.14.0",
         "prettier": "^3.3.3",
         "tsx": "^4.19.2",
         "typescript": "^5.6.3"
