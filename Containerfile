@@ -1,12 +1,12 @@
 FROM node:lts-alpine
 
 WORKDIR /usr/app
-ENV NODE_ENV production
+ENV NODE_ENV=production
 
 COPY LICENSE .
 COPY README.md .
 COPY package*.json .
-COPY dist dist
+COPY dist .
 
 RUN npm ci
 
