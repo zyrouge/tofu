@@ -294,7 +294,7 @@ export class TofuMusicUtils {
 
     async search(terms: string): Promise<TofuYoutubeSearchVideo[]> {
         try {
-            const client = await this.getClient();
+            const client = await TofuYoutubeUtils.getClient();
             const { videos } = await client.search(terms, {
                 type: "video",
             });
@@ -311,7 +311,7 @@ export class TofuMusicUtils {
     async getVideo(url: string): Promise<TofuYoutubeVideo | undefined> {
         try {
             const id = TofuYoutubeUtils.parseVideoId(url)!;
-            const client = await this.getClient();
+            const client = await TofuYoutubeUtils.getClient();
             const video = await client.getBasicInfo(id);
             return video;
         } catch (err) {
@@ -325,7 +325,7 @@ export class TofuMusicUtils {
     async getPlaylist(url: string): Promise<TofuYoutubePlaylist | undefined> {
         try {
             const id = TofuYoutubeUtils.parsePlaylistId(url)!;
-            const client = await this.getClient();
+            const client = await TofuYoutubeUtils.getClient();
             const playlist = await client.getPlaylist(id);
             // @ts-expect-error turns into usable playlist
             playlist.supportedVideos = TofuYoutubeUtils.filterSupportedVideos(
@@ -343,12 +343,12 @@ export class TofuMusicUtils {
     async generateSongWebmStream(song: TofuSong) {
         try {
             const id = TofuYoutubeUtils.parseVideoId(song.metadata.url)!;
-            const client = await this.getClient({});
+            const client = await TofuYoutubeUtils.getClient();
             const stream = await client.download(id, {
                 quality: "best",
                 type: "audio",
                 format: "webm",
-                client: "YTMUSIC",
+                client: "TV",
             });
             // @ts-expect-error `stream` is compatible
             return Readable.fromWeb(stream);
@@ -358,10 +358,6 @@ export class TofuMusicUtils {
             );
             log.logError(err);
         }
-    }
-
-    async getClient(config?: youtube.Types.InnerTubeConfig) {
-        return youtube.Innertube.create(config);
     }
 }
 
@@ -442,5 +438,17 @@ export class TofuYoutubeUtils {
             (x): x is TofuYoutubeSupportedVideo =>
                 x instanceof youtube.YTNodes.Video,
         );
+    }
+
+    static _client?: [youtube.Innertube, number];
+
+    static async getClient() {
+        const now = Date.now();
+        if (this._client && this._client[1] - now < 90 * 60 * 1000) {
+            return this._client[0];
+        }
+        const client = await youtube.Innertube.create();
+        this._client = [client, now];
+        return client;
     }
 }
