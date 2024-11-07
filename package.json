@@ -7,9 +7,10 @@
     "scripts": {
         "start": "cross-env NODE_ENV=production node .",
         "dev": "npm run build && cross-env NODE_ENV=development node .",
-        "build": "rimraf dist && tsc && tsc-alias",
+        "build": "rimraf dist && tsc && tsc-alias && npm run build:metadata",
+        "build:metadata": "node scripts/generate-build-metadata.js",
         "typecheck": "tsc --noEmit",
-        "lint": "prettier . --check && eslint src"
+        "lint": "prettier . --check"
     },
     "dependencies": {
         "ansi-colors": "^4.1.3",

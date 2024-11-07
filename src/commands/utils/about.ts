@@ -1,6 +1,8 @@
 import { TofuCommand } from "@/core/command";
+import { getBuildMetadata } from "@/utils/build-metadata";
 import { colors } from "@/utils/colors";
 import { constants } from "@/utils/constants";
+import { getEnvMode } from "@/utils/env";
 
 export const aboutCommand: TofuCommand = {
     config: {
@@ -8,6 +10,8 @@ export const aboutCommand: TofuCommand = {
         description: `About ${constants.project.name}.`,
     },
     invoke: async () => {
+        const mode = getEnvMode();
+        const buildMetadata = await getBuildMetadata();
         return {
             message: {
                 embeds: [
@@ -18,6 +22,14 @@ export const aboutCommand: TofuCommand = {
                         },
                         description: constants.project.description,
                         fields: [
+                            {
+                                name: "Technical information",
+                                value: [
+                                    `Environment: \`${mode}\``,
+                                    `Latest commit ID: \`${buildMetadata?.latestCommit ?? "?"}\``,
+                                    `Built at: **${buildMetadata?.builtAt ? new Date(buildMetadata?.builtAt).toLocaleString() : "?"}**`,
+                                ].join("\n"),
+                            },
                             {
                                 name: "More information",
                                 value: [
