@@ -1,14 +1,13 @@
 {
     "name": "tofu",
-    "version": "0.0.0",
+    "version": "0.0.1",
     "private": true,
     "description": "",
     "main": "dist/index.js",
     "scripts": {
         "start": "cross-env NODE_ENV=production node .",
         "dev": "npm run build && cross-env NODE_ENV=development node .",
-        "build": "rimraf dist && tsc && tsc-alias && npm run build:metadata",
-        "build:metadata": "node scripts/generate-build-metadata.js",
+        "build": "rimraf dist && tsc && tsc-alias",
         "typecheck": "tsc --noEmit",
         "lint": "prettier . --check"
     },

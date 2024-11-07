@@ -1,8 +1,8 @@
 import { TofuCommand } from "@/core/command";
-import { getBuildMetadata } from "@/utils/build-metadata";
 import { colors } from "@/utils/colors";
 import { constants } from "@/utils/constants";
 import { getEnvMode } from "@/utils/env";
+import { getVersion } from "@/utils/version";
 
 export const aboutCommand: TofuCommand = {
     config: {
@@ -11,7 +11,7 @@ export const aboutCommand: TofuCommand = {
     },
     invoke: async () => {
         const mode = getEnvMode();
-        const buildMetadata = await getBuildMetadata();
+        const version = await getVersion();
         return {
             message: {
                 embeds: [
@@ -26,14 +26,13 @@ export const aboutCommand: TofuCommand = {
                                 name: "Technical information",
                                 value: [
                                     `Environment: \`${mode}\``,
-                                    `Latest commit ID: \`${buildMetadata?.latestCommit ?? "?"}\``,
-                                    `Built at: **${buildMetadata?.builtAt ? new Date(buildMetadata?.builtAt).toLocaleString() : "?"}**`,
+                                    `Version: \`v${version}\``,
                                 ].join("\n"),
                             },
                             {
                                 name: "More information",
                                 value: [
-                                    `${constants.project.author}'s Github: **${constants.urls.github.author}**`,
+                                    `${constants.project.author}'s GitHub: **${constants.urls.github.author}**`,
                                     `Github Repository: **${constants.urls.github.repository}**`,
                                     `License: **${constants.project.license}**`,
                                 ].join("\n"),

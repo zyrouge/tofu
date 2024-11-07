@@ -1,9 +1,0 @@
-.github
-.vscode
-data
-media
-node_modules
-config
-config.json
-!config/schema.json
-!config/example.json

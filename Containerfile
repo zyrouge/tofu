@@ -1,12 +1,23 @@
+FROM node:lts-alpine AS builder
+
+WORKDIR /usr/app
+
+COPY package*.json .
+COPY tsconfig.json .
+COPY src src
+
+RUN npm ci
+RUN npm run build
+
 FROM node:lts-alpine
 
 WORKDIR /usr/app
-ENV NODE_ENV=production
+ENV NODE_ENV production
 
 COPY LICENSE .
 COPY README.md .
 COPY package*.json .
-COPY dist .
+COPY --from=builder /usr/app/dist dist
 
 RUN npm ci
 
