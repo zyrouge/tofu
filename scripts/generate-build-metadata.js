@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-require-imports */
 const p = require("path");
-const { writeFile } = require("fs-extra");
+const { writeFile, ensureDir } = require("fs-extra");
 const { promisify } = require("util");
 const { exec } = require("child_process");
 
@@ -19,6 +19,7 @@ const start = async () => {
         latestCommit: (await execAsync("git rev-parse HEAD")).stdout.trim(),
         builtAt: Date.now(),
     };
+    await ensureDir(p.dirname(BUILD_METADATA_PATH));
     await writeFile(BUILD_METADATA_PATH, JSON.stringify(buildMetadata));
 };
 
