@@ -1,6 +1,7 @@
 import { TofuCommand } from "@/core/command";
 import { colors } from "@/utils/colors";
 import { constants } from "@/utils/constants";
+import { DurationUtils } from "@/utils/duration";
 import { getEnvMode } from "@/utils/env";
 import { getVersion } from "@/utils/version";
 
@@ -9,7 +10,7 @@ export const aboutCommand: TofuCommand = {
         name: "about",
         description: `About ${constants.project.name}.`,
     },
-    invoke: async () => {
+    invoke: async (tofu) => {
         const mode = getEnvMode();
         const version = await getVersion();
         return {
@@ -27,6 +28,10 @@ export const aboutCommand: TofuCommand = {
                                 value: [
                                     `Environment: \`${mode}\``,
                                     `Version: \`v${version}\``,
+                                    `Uptime: **${DurationUtils.prettyMilliseconds(
+                                        tofu.uptime,
+                                        "human",
+                                    )}**`,
                                 ].join("\n"),
                             },
                             {
