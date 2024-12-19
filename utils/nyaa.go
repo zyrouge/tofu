@@ -6,22 +6,12 @@ import (
 	"net/url"
 	"regexp"
 	"strconv"
-	"strings"
 
 	"github.com/PuerkitoBio/goquery"
 )
 
-type NyaaSearchItemStatus string
-
-const (
-	NyaaSearchItemStatusSuccess NyaaSearchItemStatus = "success"
-	NyaaSearchItemStatusDefault NyaaSearchItemStatus = "default"
-	NyaaSearchItemStatusDanger  NyaaSearchItemStatus = "danger"
-)
-
 type NyaaSearchItem struct {
 	Id        string
-	Status    NyaaSearchItemStatus
 	Category  string
 	Title     string
 	Url       string
@@ -62,14 +52,12 @@ func NyaaSearch(terms string) (*NyaaSearchResult, error) {
 	}
 	items := []NyaaSearchItem{}
 	doc.Find(".torrent-list tbody tr").Each(func(i int, x *goquery.Selection) {
-		classes := strings.Split(x.AttrOr("class", ""), " ")
 		rows := x.Find("td")
 		name := rows.Eq(1).Find("a").Eq(-1)
 		links := rows.Eq(2).Find("a")
 		url := NyaaBaseUrl + name.AttrOr("href", "")
 		items = append(items, NyaaSearchItem{
 			Id:        parseIdFromViewUrl(url),
-			Status:    NyaaSearchItemStatus(classes[len(classes)-1]),
 			Category:  rows.Eq(0).Find("a").AttrOr("title", ""),
 			Title:     name.Text(),
 			Url:       url,
