@@ -41,7 +41,7 @@ func NewTofuHttpServer(host string, port int) *TofuHttpServer {
 func (server *TofuHttpServer) Start() {
 	go func() {
 		server.Active = true
-		slog.Error("starting http server in http://" + server.Server.Addr)
+		slog.Info("starting http server in http://" + server.Server.Addr)
 		err := server.Server.ListenAndServe()
 		server.Active = false
 		if !errors.Is(err, http.ErrServerClosed) {

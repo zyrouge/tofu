@@ -10,6 +10,9 @@ import (
 	"me.zyrouge.tofu/core"
 )
 
+// func main() {
+// }
+
 func main() {
 	if err := start(); err != nil {
 		panic(err)
@@ -38,6 +41,8 @@ func start() error {
 		Commands: []core.TofuCommand{
 			commands.NewTofuPingCommand(),
 			commands.NewTofuUptimeCommand(),
+			commands.NewTofuNyaaSearchCommand(),
+			commands.NewTofuNyaaMagnetCommand(),
 		},
 	}
 	tofu, err := core.NewTofu(options)

@@ -14,9 +14,9 @@ func NewTofuApplicationCommandInteractionEvent() core.TofuEvent {
 			return
 		}
 		data := event.SlashCommandInteractionData()
-		if command, ok := tofu.Commands[data.CommandName()]; ok {
-			response := command.Invoke(tofu, event)
-			if err := event.Respond(discord.InteractionResponseTypeCreateMessage, response); err != nil {
+		if cmd, ok := tofu.Commands[data.CommandName()]; ok {
+			resp := cmd.Invoke(tofu, event)
+			if err := event.Respond(discord.InteractionResponseTypeCreateMessage, resp); err != nil {
 				slog.Error("application command interaction event respond failed: " + err.Error())
 			}
 		}
