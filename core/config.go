@@ -12,8 +12,9 @@ type TofuHttpServerConfig struct {
 }
 
 type TofuDiscordStatusConfig struct {
-	Type     string `json:"type"`
-	Activity string `json:"activity"`
+	Status       *string `json:"status"`
+	ActivityType string  `json:"activityType"`
+	ActivityName string  `json:"activityName"`
 }
 
 type TofuFilteredGuildsConfig struct {

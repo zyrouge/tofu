@@ -33,6 +33,7 @@ func start() error {
 		Events: []core.TofuEvent{
 			bot_events.NewTofuApplicationCommandInteractionEvent(),
 			bot_events.NewTofuAutocompleteInteractionEvent(),
+			bot_events.NewTofuReadyEvent(),
 		},
 		Commands: []core.TofuCommand{
 			commands.NewTofuPingCommand(),
