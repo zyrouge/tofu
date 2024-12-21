@@ -1,13 +1,13 @@
-package utils
+package nyaa
 
 import (
 	"fmt"
-	"net/http"
 	"net/url"
 	"regexp"
 	"strconv"
 
 	"github.com/PuerkitoBio/goquery"
+	"me.zyrouge.tofu/utils"
 )
 
 type NyaaSearchItem struct {
@@ -30,19 +30,9 @@ type NyaaSearchResult struct {
 	Items []NyaaSearchItem
 }
 
-type NyaaMagnetResult struct {
-	Id     string
-	Title  string
-	Url    string
-	Magnet string
-}
-
-const NyaaBaseUrl = "https://nyaa.si"
-const NyaaFaviconUrl = "https://nyaa.si/static/favicon.png"
-
 func NyaaSearch(terms string) (*NyaaSearchResult, error) {
 	url := fmt.Sprintf("%s/?q=%s&s=seeders&o=desc", NyaaBaseUrl, url.QueryEscape(terms))
-	resp, err := http.Get(url)
+	resp, err := utils.TofuHttpClient.Get(url)
 	if err != nil {
 		return nil, err
 	}
@@ -74,25 +64,6 @@ func NyaaSearch(terms string) (*NyaaSearchResult, error) {
 		Terms: terms,
 		Url:   url,
 		Items: items,
-	}, nil
-}
-
-func NyaaMagnet(id string) (*NyaaMagnetResult, error) {
-	url := fmt.Sprintf("%s/view/%s", NyaaBaseUrl, id)
-	resp, err := http.Get(url)
-	if err != nil {
-		return nil, err
-	}
-	doc, err := goquery.NewDocumentFromReader(resp.Body)
-	if err != nil {
-		return nil, err
-	}
-	panel := doc.Find(".container .panel").Eq(0)
-	return &NyaaMagnetResult{
-		Id:     id,
-		Title:  panel.Find(".panel-title").Eq(0).Text(),
-		Url:    url,
-		Magnet: panel.Find(".panel-footer .card-footer-item").Eq(0).AttrOr("href", ""),
 	}, nil
 }
 

@@ -9,6 +9,7 @@ import (
 	"github.com/disgoorg/disgo/events"
 	"me.zyrouge.tofu/core"
 	"me.zyrouge.tofu/utils"
+	"me.zyrouge.tofu/utils/nyaa"
 )
 
 func NewTofuNyaaMagnetCommand() core.TofuCommand {
@@ -30,12 +31,12 @@ func NewTofuNyaaMagnetCommand() core.TofuCommand {
 		Invoke: func(tofu *core.Tofu, event *events.ApplicationCommandInteractionCreate) discord.InteractionResponseData {
 			data := event.SlashCommandInteractionData()
 			id := strings.TrimSpace(data.String("id"))
-			if len(id) == 0 {
+			if id == "" {
 				return discord.NewMessageCreateBuilder().
 					SetContent(utils.FailureMessage("You did not provide a value for `id`.")).
 					Build()
 			}
-			result, err := utils.NyaaMagnet(id)
+			result, err := nyaa.NyaaMagnet(id)
 			if err != nil {
 				slog.Error("nyaa magnet fetch failed: " + err.Error())
 				return discord.NewMessageCreateBuilder().
@@ -43,7 +44,7 @@ func NewTofuNyaaMagnetCommand() core.TofuCommand {
 					Build()
 			}
 			embed := discord.NewEmbedBuilder().
-				SetAuthor(result.Title, result.Url, utils.NyaaFaviconUrl).
+				SetAuthor(result.Title, result.Url, nyaa.NyaaFaviconUrl).
 				SetColor(utils.ColorNyaaBlue).
 				AddField(
 					fmt.Sprintf("%s Magent", utils.EmojiMagnet),

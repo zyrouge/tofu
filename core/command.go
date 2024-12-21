@@ -5,11 +5,11 @@ import (
 	"github.com/disgoorg/disgo/events"
 )
 
-type TofuCommandAutocomplete func(tofu *Tofu, event *events.AutocompleteInteractionCreate) discord.InteractionResponseData
+type TofuCommandAutocomplete func(tofu *Tofu, event *events.AutocompleteInteractionCreate) discord.AutocompleteResult
 type TofuCommandInvoke func(tofu *Tofu, event *events.ApplicationCommandInteractionCreate) discord.InteractionResponseData
 
 type TofuCommand struct {
 	Config       discord.SlashCommandCreate
-	Autocomplete *TofuCommandAutocomplete
+	Autocomplete TofuCommandAutocomplete
 	Invoke       TofuCommandInvoke
 }

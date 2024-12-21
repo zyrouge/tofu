@@ -9,12 +9,13 @@ import (
 	"github.com/disgoorg/disgo/events"
 	"me.zyrouge.tofu/core"
 	"me.zyrouge.tofu/utils"
+	"me.zyrouge.tofu/utils/nyaa"
 )
 
-func NewTofuNyaaSearchCommand() core.TofuCommand {
+func NewTofuNyaaCommand() core.TofuCommand {
 	return core.TofuCommand{
 		Config: discord.SlashCommandCreate{
-			Name:        "nyaa-search",
+			Name:        "nyaa",
 			Description: "Search Nyaa.si.",
 			Contexts: []discord.InteractionContextType{
 				discord.InteractionContextTypeGuild,
@@ -30,12 +31,12 @@ func NewTofuNyaaSearchCommand() core.TofuCommand {
 		Invoke: func(tofu *core.Tofu, event *events.ApplicationCommandInteractionCreate) discord.InteractionResponseData {
 			data := event.SlashCommandInteractionData()
 			terms := strings.TrimSpace(data.String("terms"))
-			if len(terms) == 0 {
+			if terms == "" {
 				return discord.NewMessageCreateBuilder().
 					SetContent(utils.FailureMessage("You did not provide a value for `terms`.")).
 					Build()
 			}
-			result, err := utils.NyaaSearch(terms)
+			result, err := nyaa.NyaaSearch(terms)
 			if err != nil {
 				slog.Error("nyaa search failed: " + err.Error())
 				return discord.NewMessageCreateBuilder().
@@ -48,7 +49,7 @@ func NewTofuNyaaSearchCommand() core.TofuCommand {
 					Build()
 			}
 			embed := discord.NewEmbedBuilder().
-				SetAuthor(fmt.Sprintf("Results for \"%s\"", terms), result.Url, utils.NyaaFaviconUrl).
+				SetAuthor(fmt.Sprintf("Results for \"%s\"", terms), result.Url, nyaa.NyaaFaviconUrl).
 				SetColor(utils.ColorNyaaBlue)
 			i := 1
 			count := min(10, len(result.Terms))

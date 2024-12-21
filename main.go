@@ -41,8 +41,9 @@ func start() error {
 		Commands: []core.TofuCommand{
 			commands.NewTofuPingCommand(),
 			commands.NewTofuUptimeCommand(),
-			commands.NewTofuNyaaSearchCommand(),
+			commands.NewTofuNyaaCommand(),
 			commands.NewTofuNyaaMagnetCommand(),
+			commands.NewTofuAniListSearchCommand(),
 		},
 	}
 	tofu, err := core.NewTofu(options)

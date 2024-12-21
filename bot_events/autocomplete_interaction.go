@@ -13,9 +13,9 @@ func NewTofuAutocompleteInteractionEvent() core.TofuEvent {
 		if !tofu.FilteredGuilds.IsWhitelisted(event.GuildID()) {
 			return
 		}
-		if command, ok := tofu.Commands[event.Data.CommandName]; ok && command.Autocomplete != nil {
-			response := (*command.Autocomplete)(tofu, event)
-			if err := event.Respond(discord.InteractionResponseTypeCreateMessage, response); err != nil {
+		if cmd, ok := tofu.Commands[event.Data.CommandName]; ok && cmd.Autocomplete != nil {
+			resp := cmd.Autocomplete(tofu, event)
+			if err := event.Respond(discord.InteractionResponseTypeAutocompleteResult, resp); err != nil {
 				slog.Error("autocomplete interaction event respond failed: " + err.Error())
 			}
 		}
