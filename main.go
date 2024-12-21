@@ -40,6 +40,7 @@ func start() error {
 			commands.NewTofuNyaaCommand(),
 			commands.NewTofuNyaaMagnetCommand(),
 			commands.NewTofuAniListSearchCommand(),
+			commands.NewTofuAboutCommand(),
 		},
 	}
 	tofu, err := core.NewTofu(options)

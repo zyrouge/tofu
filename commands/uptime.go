@@ -20,10 +20,14 @@ func NewTofuUptimeCommand() core.TofuCommand {
 			},
 		},
 		Invoke: func(tofu *core.Tofu, event *events.ApplicationCommandInteractionCreate) discord.InteractionResponseData {
-			uptime := time.Since(tofu.StartedAt).Truncate(time.Second).String()
+			uptime := getTofuUptimeString(tofu)
 			return discord.NewMessageCreateBuilder().
 				SetContent(utils.RobotMessage(fmt.Sprintf("I've been up and running for **%s**!", uptime))).
 				Build()
 		},
 	}
+}
+
+func getTofuUptimeString(tofu *core.Tofu) string {
+	return time.Since(tofu.StartedAt).Truncate(time.Second).String()
 }
