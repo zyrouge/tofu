@@ -1,7 +1,6 @@
 package main
 
 import (
-	"errors"
 	"os"
 	"path"
 
@@ -10,9 +9,6 @@ import (
 	"me.zyrouge.tofu/core"
 )
 
-// func main() {
-// }
-
 func main() {
 	if err := start(); err != nil {
 		panic(err)
@@ -20,14 +16,14 @@ func main() {
 }
 
 func start() error {
-	if len(os.Args) < 2 {
-		return errors.New("missing config file argument")
-	}
 	cwd, err := os.Getwd()
 	if err != nil {
 		return err
 	}
-	configFile := path.Join(cwd, os.Args[1])
+	configFile := path.Join(cwd, "config.json")
+	if len(os.Args) >= 2 {
+		configFile = path.Join(cwd, os.Args[1])
+	}
 	config, err := core.ParseTofuConfigFile(configFile)
 	if err != nil {
 		return err
