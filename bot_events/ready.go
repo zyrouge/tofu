@@ -22,7 +22,6 @@ func NewTofuReadyEvent() core.TofuEvent {
 		if tofu.Config.DiscordStatus == nil {
 			return
 		}
-		activityType := activityNameTypes[tofu.Config.DiscordStatus.ActivityType]
 		err := tofu.Bot.SetPresence(
 			context.TODO(),
 			func(presenceUpdate *gateway.MessageDataPresenceUpdate) {
@@ -31,7 +30,7 @@ func NewTofuReadyEvent() core.TofuEvent {
 				}
 				activity := discord.Activity{
 					Name: tofu.Config.DiscordStatus.ActivityName,
-					Type: activityType,
+					Type: activityNameTypes[tofu.Config.DiscordStatus.ActivityType],
 				}
 				presenceUpdate.Activities = []discord.Activity{activity}
 			},
