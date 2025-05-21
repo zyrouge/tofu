@@ -4,7 +4,7 @@ go 1.23.1
 
 require (
 	github.com/PuerkitoBio/goquery v1.10.3
-	github.com/disgoorg/disgo v0.18.14
+	github.com/disgoorg/disgo v0.18.16
 	github.com/disgoorg/snowflake/v2 v2.0.3
 )
 
