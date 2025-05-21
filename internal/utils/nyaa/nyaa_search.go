@@ -7,7 +7,7 @@ import (
 	"strconv"
 
 	"github.com/PuerkitoBio/goquery"
-	"me.zyrouge.tofu/utils"
+	"me.zyrouge.tofu/internal/utils"
 )
 
 type NyaaSearchItem struct {

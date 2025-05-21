@@ -4,9 +4,9 @@ import (
 	"os"
 	"path"
 
-	"me.zyrouge.tofu/bot_events"
-	"me.zyrouge.tofu/commands"
-	"me.zyrouge.tofu/core"
+	"me.zyrouge.tofu/internal/bot_events"
+	"me.zyrouge.tofu/internal/commands"
+	"me.zyrouge.tofu/internal/core"
 )
 
 func main() {

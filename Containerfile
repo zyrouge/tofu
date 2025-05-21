@@ -6,10 +6,7 @@ COPY go.mod go.sum ./
 RUN go mod download
 
 COPY main.go .
-COPY bot_events bot_events
-COPY commands commands
-COPY core core
-COPY utils utils
+COPY internal internal
 RUN go build -o ./dist/tofu .
 
 FROM alpine

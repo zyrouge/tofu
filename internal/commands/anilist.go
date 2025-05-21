@@ -8,9 +8,9 @@ import (
 
 	"github.com/disgoorg/disgo/discord"
 	"github.com/disgoorg/disgo/events"
-	"me.zyrouge.tofu/core"
-	"me.zyrouge.tofu/utils"
-	"me.zyrouge.tofu/utils/anilist"
+	"me.zyrouge.tofu/internal/core"
+	"me.zyrouge.tofu/internal/utils"
+	"me.zyrouge.tofu/internal/utils/anilist"
 )
 
 func NewTofuAniListSearchCommand() core.TofuCommand {

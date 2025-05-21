@@ -9,7 +9,7 @@ import (
 	"regexp"
 	"strconv"
 
-	"me.zyrouge.tofu/utils"
+	"me.zyrouge.tofu/internal/utils"
 )
 
 const AniListApiUrl = "https://graphql.anilist.co"

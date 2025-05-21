@@ -5,7 +5,7 @@ import (
 
 	"github.com/disgoorg/disgo/discord"
 	"github.com/disgoorg/disgo/events"
-	"me.zyrouge.tofu/core"
+	"me.zyrouge.tofu/internal/core"
 )
 
 func NewTofuApplicationCommandInteractionEvent() core.TofuEvent {

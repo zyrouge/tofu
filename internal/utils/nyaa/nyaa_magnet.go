@@ -4,7 +4,7 @@ import (
 	"fmt"
 
 	"github.com/PuerkitoBio/goquery"
-	"me.zyrouge.tofu/utils"
+	"me.zyrouge.tofu/internal/utils"
 )
 
 type NyaaMagnetResult struct {

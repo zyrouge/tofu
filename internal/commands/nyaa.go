@@ -7,9 +7,9 @@ import (
 
 	"github.com/disgoorg/disgo/discord"
 	"github.com/disgoorg/disgo/events"
-	"me.zyrouge.tofu/core"
-	"me.zyrouge.tofu/utils"
-	"me.zyrouge.tofu/utils/nyaa"
+	"me.zyrouge.tofu/internal/core"
+	"me.zyrouge.tofu/internal/utils"
+	"me.zyrouge.tofu/internal/utils/nyaa"
 )
 
 func NewTofuNyaaCommand() core.TofuCommand {
